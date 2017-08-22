@@ -29,14 +29,18 @@ namespace OnlinePizza.Data
 
             if (!context.Dishes.Any())
             {
+                var pizza = new Category() { Name = "Pizza" };
+                var pasta = new Category() { Name = "Pasta" };
+                var salad = new Category() { Name = "Salad" };
+
                 var cheese = new Ingredient { IngredientID = 1, IngredientName = "Cheese" };
                 var ham = new Ingredient { IngredientID = 2, IngredientName = "Ham" };
                 var tomato = new Ingredient { IngredientID = 3, IngredientName = "Tomato" };
                 var pineapple = new Ingredient { IngredientID = 4, IngredientName = "Pineapple" };
 
-                var vesuvio = new Dish() { ID = 1, Name = "Vesuvio", Price = 75 };
-                var hawaii = new Dish() { ID = 2, Name = "Hawaii", Price = 80 };
-                var margaritha = new Dish() {ID = 3, Name = "Margaritha", Price = 70 };
+                var vesuvio = new Dish() { ID = 1, Name = "Vesuvio", Price = 75, Category = pizza };
+                var hawaii = new Dish() { ID = 2, Name = "Hawaii", Price = 80, Category = pizza };
+                var margaritha = new Dish() {ID = 3, Name = "Margaritha", Price = 70, Category = pizza };
 
                 var vesuvioCheese = new DishIngredient { Dish = margaritha, Ingredient = cheese };
                 var vesuvioTomato = new DishIngredient { Dish = margaritha, Ingredient = tomato };

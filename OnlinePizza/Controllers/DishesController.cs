@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlinePizza.Data;
 using OnlinePizza.Models;
+using OnlinePizza.ViewModels;
 
 namespace OnlinePizza.Controllers
 {
@@ -76,12 +77,35 @@ namespace OnlinePizza.Controllers
                 return NotFound();
             }
 
-            var dish = await _context.Dishes.SingleOrDefaultAsync(m => m.ID == id);
+            var dish = await _context.Dishes.
+                Include(x => x.Category).
+                Include(x => x.DishIngredients).
+                ThenInclude(x => x.Ingredient).
+                SingleOrDefaultAsync(m => m.ID == id);
+
+            var allCategories = await _context.Categories.ToListAsync();
+            var allIngredients = await _context.Ingredients.Select(x => new IngredientViewModel()
+            {
+                Id = x.IngredientID,
+                Name = x.IngredientName,
+                Selected = dish.DishIngredients.Any(k => k.IngredientID.Equals(x.IngredientID) ? true : false)
+            }).ToListAsync();
+
+            var viewModel = new DishViewModel()
+            {
+                DishId = dish.ID,
+                Name = dish.Name,
+                Price = dish.Price,
+                CategoryId = dish.Category.CategoryId,
+                Ingredients = allIngredients,
+                Categories = allCategories
+            };
+
             if (dish == null)
             {
                 return NotFound();
             }
-            return View(dish);
+            return View(viewModel);
         }
 
         // POST: Dishes/Edit/5
@@ -89,15 +113,29 @@ namespace OnlinePizza.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Price")] Dish dish)
+        //[Bind("DishId,Name,Price,Ingredients")] Dish dish
+        public async Task<IActionResult> Edit(DishViewModel model)
         {
-            if (id != dish.ID)
-            {
-                return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
+                var dish = _context.Dishes.Include(x => x.DishIngredients).FirstOrDefault(x => x.ID.Equals(model.DishId));
+                dish.CategoryId = model.CategoryId;
+                dish.Name = model.Name;
+                dish.Price = model.Price;
+
+                foreach (var ingredient in model.Ingredients)
+                {
+                    if (ingredient.Selected && !dish.DishIngredients.Any(x => x.IngredientID.Equals(ingredient.Id)))
+                    {
+                        dish.DishIngredients.Add(new DishIngredient() { IngredientID = ingredient.Id });
+                    }
+                    else if (!ingredient.Selected && dish.DishIngredients.Any(x => x.IngredientID.Equals(ingredient.Id)))
+                    {
+                        dish.DishIngredients.RemoveAll(x => x.IngredientID.Equals(ingredient.Id));
+                    }
+                }
+
                 try
                 {
                     _context.Update(dish);
@@ -116,7 +154,7 @@ namespace OnlinePizza.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(dish);
+            return View(model);
         }
 
         // GET: Dishes/Delete/5

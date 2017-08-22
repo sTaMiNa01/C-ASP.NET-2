@@ -40,5 +40,6 @@ namespace OnlinePizza.Data
         public DbSet<Dish> Dishes { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<DishIngredient> DishIngredients { get; set; }
+        public DbSet<Category> Categories { get; set; }
     }
 }
