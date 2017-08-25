@@ -75,14 +75,29 @@ namespace OnlinePizza.Controllers
         public async Task<IActionResult> Create(DishViewModel model)
         {
             Dish newDish = new Dish();
+            List<DishIngredient> dishIngrediends = new List<DishIngredient>();
 
             if (ModelState.IsValid)
             {
                 var dishes = await _context.Dishes.ToListAsync();
                 int newID = dishes.Count + 1;
 
+                foreach (var item in model.Ingredients)
+                {
+                    DishIngredient newDishes = new DishIngredient();
+                    if (item.Selected == true)
+                    {
+                        newDishes.IngredientID = item.ID;
+                        newDishes.DishID = newID;
+                        dishIngrediends.Add(newDishes);
+
+                    }
+
+                }
+
                 newDish.DishName = model.Name;
                 newDish.ID = newID;
+                newDish.DishIngredients = dishIngrediends;
                 newDish.Price = model.Price;
                 newDish.CategoryID = model.CategoryID;
 
