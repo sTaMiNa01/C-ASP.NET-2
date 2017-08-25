@@ -1,4 +1,4 @@
-﻿@model OnlinePizza.Models.Dish
+﻿@model OnlinePizza.ViewModels.DishViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -14,14 +14,38 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" id="nameInput" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
+                <input asp-for="Price" class="form-control" id="priceInput" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
+
+            <div class="form-group">
+                <label asp-for="CategoryID" class="control-label">Kategori</label>
+                <br />
+                <select asp-for="CategoryID">
+                    @foreach (var category in Model.Categories)
+                    {
+                        <option value="@category.CategoryID">@category.CategoryName</option>
+            
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Ingredients" class="control-label"></label>
+                <br />
+                @for (int i = 0; i < Model.Ingredients.Count; i++)
+                {
+                    <label>@Model.Ingredients[i].Name</label>
+                    <input asp-for="@Model.Ingredients[i].Selected" type="checkbox" />
+                    <input asp-for="@Model.Ingredients[i].ID" value="@Model.Ingredients[i].ID" type="hidden" />
+                }
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>

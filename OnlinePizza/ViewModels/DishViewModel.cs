@@ -9,8 +9,7 @@ namespace OnlinePizza.ViewModels
 {
     public class DishViewModel
     {
-
-        public int DishId { get; set; }
+        public int DishID { get; set; }
 
         [Required]
         public string Name { get; set; }
@@ -18,7 +17,7 @@ namespace OnlinePizza.ViewModels
         public int Price { get; set; }
         public List<IngredientViewModel> Ingredients { get; set; }
 
-        public int CategoryId { get; set; }
+        public int CategoryID { get; set; }
         public List<Category> Categories { get; set; }
     }
 }

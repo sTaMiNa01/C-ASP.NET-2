@@ -48,9 +48,23 @@ namespace OnlinePizza.Controllers
         }
 
         // GET: Dishes/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var allCategories = await _context.Categories.ToListAsync();
+            var allIngredients = await _context.Ingredients.Select(x => new IngredientViewModel()
+            {
+                ID = x.IngredientID,
+                Name = x.IngredientName
+
+            }).ToListAsync();
+
+            var viewModel = new DishViewModel()
+            {
+                Ingredients = allIngredients,
+                Categories = allCategories
+            };
+
+            return View(viewModel);
         }
 
         // POST: Dishes/Create
@@ -58,15 +72,27 @@ namespace OnlinePizza.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name,Price")] Dish dish)
+        public async Task<IActionResult> Create(DishViewModel model)
         {
+            Dish newDish = new Dish();
+
             if (ModelState.IsValid)
             {
-                _context.Add(dish);
+                var dishes = await _context.Dishes.ToListAsync();
+                int newID = dishes.Count + 1;
+
+                newDish.DishName = model.Name;
+                newDish.ID = newID;
+                newDish.Price = model.Price;
+                newDish.CategoryID = model.CategoryID;
+
+                _context.Add(newDish);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+
             }
-            return View(dish);
+
+            return View(newDish);
         }
 
         // GET: Dishes/Edit/5
@@ -86,17 +112,18 @@ namespace OnlinePizza.Controllers
             var allCategories = await _context.Categories.ToListAsync();
             var allIngredients = await _context.Ingredients.Select(x => new IngredientViewModel()
             {
-                Id = x.IngredientID,
+                ID = x.IngredientID,
                 Name = x.IngredientName,
                 Selected = dish.DishIngredients.Any(k => k.IngredientID.Equals(x.IngredientID) ? true : false)
+
             }).ToListAsync();
 
             var viewModel = new DishViewModel()
             {
-                DishId = dish.ID,
-                Name = dish.Name,
+                DishID = dish.ID,
+                Name = dish.DishName,
                 Price = dish.Price,
-                CategoryId = dish.Category.CategoryId,
+                CategoryID = dish.Category.CategoryID,
                 Ingredients = allIngredients,
                 Categories = allCategories
             };
@@ -119,20 +146,20 @@ namespace OnlinePizza.Controllers
 
             if (ModelState.IsValid)
             {
-                var dish = _context.Dishes.Include(x => x.DishIngredients).FirstOrDefault(x => x.ID.Equals(model.DishId));
-                dish.CategoryId = model.CategoryId;
-                dish.Name = model.Name;
+                var dish = _context.Dishes.Include(x => x.DishIngredients).FirstOrDefault(x => x.ID.Equals(model.DishID));
+                dish.CategoryID = model.CategoryID;
+                dish.DishName = model.Name;
                 dish.Price = model.Price;
 
                 foreach (var ingredient in model.Ingredients)
                 {
-                    if (ingredient.Selected && !dish.DishIngredients.Any(x => x.IngredientID.Equals(ingredient.Id)))
+                    if (ingredient.Selected && !dish.DishIngredients.Any(x => x.IngredientID.Equals(ingredient.ID)))
                     {
-                        dish.DishIngredients.Add(new DishIngredient() { IngredientID = ingredient.Id });
+                        dish.DishIngredients.Add(new DishIngredient() { IngredientID = ingredient.ID });
                     }
-                    else if (!ingredient.Selected && dish.DishIngredients.Any(x => x.IngredientID.Equals(ingredient.Id)))
+                    else if (!ingredient.Selected && dish.DishIngredients.Any(x => x.IngredientID.Equals(ingredient.ID)))
                     {
-                        dish.DishIngredients.RemoveAll(x => x.IngredientID.Equals(ingredient.Id));
+                        dish.DishIngredients.RemoveAll(x => x.IngredientID.Equals(ingredient.ID));
                     }
                 }
 

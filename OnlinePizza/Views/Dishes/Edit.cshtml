@@ -12,7 +12,7 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="DishId" />
+            <input type="hidden" asp-for="DishID" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -24,17 +24,17 @@
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CategoryId" class="control-label">Kategori</label>
-                <select asp-for="CategoryId">
+                <label asp-for="CategoryID" class="control-label">Kategori</label>
+                <select asp-for="CategoryID">
                     @foreach (var category in Model.Categories)
                     {
-                        if (category.CategoryId.Equals(Model.CategoryId))
+                        if (category.CategoryID.Equals(Model.CategoryID))
                         {
-                            <option value="@category.CategoryId" selected="selected">@category.Name</option>
+                            <option value="@category.CategoryID" selected="selected">@category.CategoryName</option>
                         }
                         else
                         {
-                            <option value="@category.CategoryId">@category.Name</option>
+                            <option value="@category.CategoryID">@category.CategoryName</option>
 
                         }
                     }
@@ -47,15 +47,8 @@
                 {
                     <label>@Model.Ingredients[i].Name</label>
                     <input asp-for="@Model.Ingredients[i].Selected" type="checkbox" />
-                    <input asp-for="@Model.Ingredients[i].Id" value="@Model.Ingredients[i].Id" type="hidden" />
+                    <input asp-for="@Model.Ingredients[i].ID" value="@Model.Ingredients[i].ID" type="hidden" />
                 }
-                @*@foreach(var ingredient in Model.Ingredients)
-                    {
-                        <label>@ingredient.Name</label>
-                        <input asp-for="@ingredient.Selected" type="checkbox" />
-                        <input asp-for="@ingredient.Id" type="hidden" />
-                        <br />
-                    }*@
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />
