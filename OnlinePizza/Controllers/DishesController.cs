@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlinePizza.Data;
 using OnlinePizza.Models;
 using OnlinePizza.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OnlinePizza.Controllers
 {
@@ -48,6 +49,7 @@ namespace OnlinePizza.Controllers
         }
 
         // GET: Dishes/Create
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create()
         {
             var allCategories = await _context.Categories.ToListAsync();
@@ -72,6 +74,7 @@ namespace OnlinePizza.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(DishViewModel model)
         {
             Dish newDish = new Dish();
@@ -111,6 +114,7 @@ namespace OnlinePizza.Controllers
         }
 
         // GET: Dishes/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -155,7 +159,7 @@ namespace OnlinePizza.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Bind("DishId,Name,Price,Ingredients")] Dish dish
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(DishViewModel model)
         {
 
@@ -200,6 +204,7 @@ namespace OnlinePizza.Controllers
         }
 
         // GET: Dishes/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -220,6 +225,7 @@ namespace OnlinePizza.Controllers
         // POST: Dishes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var dish = await _context.Dishes.SingleOrDefaultAsync(m => m.ID == id);

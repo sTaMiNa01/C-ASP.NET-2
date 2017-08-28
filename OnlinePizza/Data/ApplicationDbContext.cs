@@ -31,6 +31,13 @@ namespace OnlinePizza.Data
                 .WithMany(d => d.DishIngredients)
                 .HasForeignKey(di => di.IngredientID);
 
+
+            builder.Entity<Dish>()
+                .HasOne(d => d.Category)
+                .WithMany(d => d.Dishes)
+                .HasForeignKey(d => d.CategoryID);
+
+
             base.OnModelCreating(builder);
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
