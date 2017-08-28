@@ -42,6 +42,7 @@ namespace OnlinePizza
             services.AddTransient<UserManager<ApplicationUser>>();
             services.AddTransient<RoleManager<IdentityRole>>();
 
+            services.AddSession();
             services.AddMvc();
         }
 
@@ -60,8 +61,8 @@ namespace OnlinePizza
             }
 
             app.UseStaticFiles();
-
             app.UseAuthentication();
+            app.UseSession();
 
             app.UseMvc(routes =>
             {
