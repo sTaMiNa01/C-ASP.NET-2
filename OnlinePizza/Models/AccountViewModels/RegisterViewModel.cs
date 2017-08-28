@@ -23,5 +23,17 @@ namespace OnlinePizza.Models.AccountViewModels
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Display(Name = "Street")]
+        [StringLength(100)]
+        public string Street { get; set; }
+
+        [Display(Name = "Zipcode")]
+        [RegularExpression("([0-9]+)", ErrorMessage = "Please enter valid Number")]
+        public int Zipcode { get; set; }
+
+        [Display(Name = "City")]
+        [StringLength(100)]
+        public string City { get; set; }
     }
 }

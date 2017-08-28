@@ -58,6 +58,9 @@ namespace OnlinePizza.Controllers
             {
                 Username = user.UserName,
                 Email = user.Email,
+                Street = user.Street,
+                Zipcode = user.Zipcode,
+                City = user.City,
                 PhoneNumber = user.PhoneNumber,
                 IsEmailConfirmed = user.EmailConfirmed,
                 StatusMessage = StatusMessage
