@@ -47,14 +47,13 @@ namespace OnlinePizza.Controllers
         // GET: Cart/Details/5
         public async Task<ActionResult> AddToCart(int Id)
         {
-            List<CartItem> cartItems = new List<CartItem>();
+            Dish dish = _context.Dishes.FirstOrDefault(p => p.ID == Id);
             Cart cart = new Cart();
             var quantity = 1;
 
-            Dish dish = _context.Dishes.FirstOrDefault(p => p.ID == Id);
-
             if (HttpContext.Session.GetInt32("Cart") == null)
             {
+                List<CartItem> cartItems = new List<CartItem>();
                 var carts = await _context.Carts.ToListAsync();
                 int newID = carts.Count + 1;
 
@@ -68,17 +67,23 @@ namespace OnlinePizza.Controllers
 
                 HttpContext.Session.SetInt32("Cart", newID);
 
+                _context.Add(cart);
+                await _context.SaveChangesAsync();
+
             } else
             {
-                CartItem item = cartItems.FirstOrDefault(p => p.Dish.ID == dish.ID);
-
                 var cartID = HttpContext.Session.GetInt32("Cart");
                 cart = await _context.Carts.Include(x => x.CartItems).ThenInclude(z => z.Dish).SingleOrDefaultAsync(y => y.CartID == cartID);
+                CartItem item = cart.CartItems.FirstOrDefault(x => x.Dish.ID == dish.ID);
 
                 if (item == null)
                 {
+                    var cartItem = await _context.CartItems.ToListAsync();
+                    int newID = cartItem.Count + 1;
+
                     cart.CartItems.Add(new CartItem
                     {
+                        CartItemID = newID,
                         Dish = dish,
                         Quantity = quantity
                     });
@@ -88,10 +93,11 @@ namespace OnlinePizza.Controllers
                     item.Quantity += quantity;
                 }
 
+                _context.Update(cart);
+                await _context.SaveChangesAsync();
+
             }
 
-            _context.Add(cart);
-            await _context.SaveChangesAsync();
             return RedirectToAction("Index", "Dishes");
         }
 
