@@ -37,6 +37,18 @@ namespace OnlinePizza.Data
                 .WithMany(d => d.Dishes)
                 .HasForeignKey(d => d.CategoryID);
 
+            builder.Entity<CartItemIngredient>()
+                 .HasKey(cii => new { cii.CartItemID, cii.IngredientID });
+
+            builder.Entity<CartItemIngredient>()
+                .HasOne(di => di.CartItem)
+                .WithMany(d => d.CartItemIngredients)
+                .HasForeignKey(di => di.CartItemID);
+
+            builder.Entity<CartItemIngredient>()
+                .HasOne(a => a.Ingredient)
+                .WithMany(b => b.CartItemIngredients)
+                .HasForeignKey(o => o.IngredientID);
 
             base.OnModelCreating(builder);
             // Customize the ASP.NET Identity model and override the defaults if needed.
@@ -50,5 +62,6 @@ namespace OnlinePizza.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<CartItemIngredient> CartItemIngredients { get; set; }
     }
 }

@@ -8,8 +8,9 @@ namespace OnlinePizza.Models
     public class Cart
     {
         public int CartID { get; set; }
-        public string Customer { get; set; }
+        public ApplicationUser Customer { get; set; }
+        public int CUstomerID { get; set; }
         public List<CartItem> CartItems { get; set; }
-        public bool Delivered { get; set; }
+        public int TotalAmount { get; set; }
     }
 }

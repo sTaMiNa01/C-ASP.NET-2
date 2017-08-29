@@ -22,30 +22,77 @@ namespace OnlinePizza.Controllers
         // GET: Cart
         public async Task<ActionResult> Index()
         {
-            Cart newCart = new Cart();
             List<CartItem> cartItems = new List<CartItem>();
-
 
             if (HttpContext.Session.GetInt32("Cart") == null)
             {
+                var carts = await _context.Carts.ToListAsync();
+                var newID = HttpContext.Session.GetInt32("Cart");
+                newID = carts.Count + 1;
                 cartItems = new List<CartItem>();
             }
             else
             {
+                Cart cart = new Cart();
+
                 var cartID = HttpContext.Session.GetInt32("Cart");
 
-                newCart = await _context.Carts.Include(x => x.CartItems).ThenInclude(z => z.Dish).SingleOrDefaultAsync(y => y.CartID == cartID);
-                cartItems = newCart.CartItems;
+                cart = await _context.Carts.Include(x => x.CartItems).ThenInclude(z => z.Dish).SingleOrDefaultAsync(y => y.CartID == cartID);
+                cartItems = cart.CartItems;
 
             }
-
-            return PartialView("_Cart", cartItems);
+            return View(cartItems);
         }
 
         // GET: Cart/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> AddToCart(int Id)
         {
-            return View();
+            List<CartItem> cartItems = new List<CartItem>();
+            Cart cart = new Cart();
+            var quantity = 1;
+
+            Dish dish = _context.Dishes.FirstOrDefault(p => p.ID == Id);
+
+            if (HttpContext.Session.GetInt32("Cart") == null)
+            {
+                var carts = await _context.Carts.ToListAsync();
+                int newID = carts.Count + 1;
+
+                cartItems.Add(new CartItem {
+                    Dish = dish,
+                    Quantity = quantity
+                });
+
+                cart.CartID = newID;
+                cart.CartItems = cartItems;
+
+                HttpContext.Session.SetInt32("Cart", newID);
+
+            } else
+            {
+                CartItem item = cartItems.FirstOrDefault(p => p.Dish.ID == dish.ID);
+
+                var cartID = HttpContext.Session.GetInt32("Cart");
+                cart = await _context.Carts.Include(x => x.CartItems).ThenInclude(z => z.Dish).SingleOrDefaultAsync(y => y.CartID == cartID);
+
+                if (item == null)
+                {
+                    cart.CartItems.Add(new CartItem
+                    {
+                        Dish = dish,
+                        Quantity = quantity
+                    });
+                }
+                else
+                {
+                    item.Quantity += quantity;
+                }
+
+            }
+
+            _context.Add(cart);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index", "Dishes");
         }
 
         // GET: Cart/Create
