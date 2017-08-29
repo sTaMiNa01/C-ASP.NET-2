@@ -1,27 +1,19 @@
 ﻿@model List<CartItem>
 
 <ul>
-
     @foreach (var item in Model)
     {
 
         <li>
-
             <div>
-
-                <i>Cart</i>
                 @item.Dish.DishName @{
 
-                    var price = item.Dish.Price * item.Quantity;
+                    var sum = item.Dish.Price * item.Quantity;
 
-                    <span>@price kr</span>
-
+                    <span>@sum kr</span>
                 }
-
             </div>
-
         </li>
 
-                    }
-
+     }
 </ul>
