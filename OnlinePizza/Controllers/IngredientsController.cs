@@ -69,6 +69,7 @@ namespace OnlinePizza.Controllers
 
                 newIngredient.IngredientName = model.IngredientName;
                 newIngredient.IngredientID = newID;
+                newIngredient.Price = model.Price;
 
                 _context.Add(newIngredient);
                 await _context.SaveChangesAsync();
@@ -98,7 +99,7 @@ namespace OnlinePizza.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IngredientID,IngredientName")] Ingredient ingredient)
+        public async Task<IActionResult> Edit(int id, [Bind("IngredientID,IngredientName,Price")] Ingredient ingredient)
         {
             if (id != ingredient.IngredientID)
             {

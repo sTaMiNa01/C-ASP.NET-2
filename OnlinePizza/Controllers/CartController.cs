@@ -44,7 +44,7 @@ namespace OnlinePizza.Controllers
             return View(cartItems);
         }
 
-        // GET: Cart/Details/5
+        // GET: Cart/AddToCart/5
         public async Task<ActionResult> AddToCart(int Id)
         {
             Dish dish = _context.Dishes.FirstOrDefault(p => p.ID == Id);

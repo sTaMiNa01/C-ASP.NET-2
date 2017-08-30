@@ -104,6 +104,39 @@ namespace OnlinePizza.Controllers
                 }
             }
 
+            var street = user.Street;
+            if(model.Street != street)
+            {
+                user.Street = model.Street;
+                var setStreet = await _userManager.UpdateAsync(user);
+                if (!setStreet.Succeeded)
+                {
+                    throw new ApplicationException($"Unexpected error occurred setting street for user with ID '{user.Id}'.");
+                }
+            }
+
+            var zipCode = user.Zipcode;
+            if (model.Zipcode != zipCode)
+            {
+                user.Zipcode = model.Zipcode;
+                var setZipCode = await _userManager.UpdateAsync(user);
+                if (!setZipCode.Succeeded)
+                {
+                    throw new ApplicationException($"Unexpected error occurred setting zipcode for user with ID '{user.Id}'.");
+                }
+            }
+
+            var city = user.City;
+            if (model.City != city)
+            {
+                user.City = model.City;
+                var setCity = await _userManager.UpdateAsync(user);
+                if (!setCity.Succeeded)
+                {
+                    throw new ApplicationException($"Unexpected error occurred setting zipcode for user with ID '{user.Id}'.");
+                }
+            }
+
             StatusMessage = "Your profile has been updated";
             return RedirectToAction(nameof(Index));
         }
