@@ -42,7 +42,7 @@ namespace OnlinePizza
             services.AddTransient<UserManager<ApplicationUser>>();
             services.AddTransient<RoleManager<IdentityRole>>();
 
-            services.AddSession();
+            services.AddSession(x => x.IdleTimeout = TimeSpan.FromMinutes(5));
             services.AddMvc();
         }
 

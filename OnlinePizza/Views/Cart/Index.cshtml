@@ -1,19 +1,29 @@
 ﻿@model List<CartItem>
 
-<ul>
-    @foreach (var item in Model)
-    {
-
-        <li>
-            <div>
-                @item.Dish.DishName @{
-
-                    var sum = item.Dish.Price * item.Quantity;
-
-                    <span>@sum kr</span>
-                }
-            </div>
-        </li>
-
-     }
-</ul>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+               <h4>Dish</h4>
+            </th>
+            <th>
+               <h4>Price</h4>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dish.DishName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dish.Price) kr
+                </td>
+            </tr>
+            
+          }
+    </tbody>
+</table>

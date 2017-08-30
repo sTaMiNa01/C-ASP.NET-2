@@ -12,7 +12,6 @@ namespace OnlinePizza.Models
         public Dish Dish { get; set; }
         public int DishID { get; set; }
         public int CartID { get; set; }
-        public int Quantity { get; set; }
         public List<CartItemIngredient> CartItemIngredients { get; set; }
     }
 }

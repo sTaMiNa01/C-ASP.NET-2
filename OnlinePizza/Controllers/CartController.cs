@@ -48,18 +48,17 @@ namespace OnlinePizza.Controllers
         public async Task<ActionResult> AddToCart(int Id)
         {
             Dish dish = _context.Dishes.FirstOrDefault(p => p.ID == Id);
-            Cart cart = new Cart();
             var quantity = 1;
 
             if (HttpContext.Session.GetInt32("Cart") == null)
             {
+                Cart cart = new Cart();
                 List<CartItem> cartItems = new List<CartItem>();
                 var carts = await _context.Carts.ToListAsync();
                 int newID = carts.Count + 1;
 
                 cartItems.Add(new CartItem {
-                    Dish = dish,
-                    Quantity = quantity
+                    Dish = dish
                 });
 
                 cart.CartID = newID;
@@ -73,25 +72,17 @@ namespace OnlinePizza.Controllers
             } else
             {
                 var cartID = HttpContext.Session.GetInt32("Cart");
-                cart = await _context.Carts.Include(x => x.CartItems).ThenInclude(z => z.Dish).SingleOrDefaultAsync(y => y.CartID == cartID);
-                CartItem item = cart.CartItems.FirstOrDefault(x => x.Dish.ID == dish.ID);
+                Cart cart = await _context.Carts.Include(x => x.CartItems).ThenInclude(z => z.Dish).SingleOrDefaultAsync(y => y.CartID == cartID);
 
-                if (item == null)
-                {
                     var cartItem = await _context.CartItems.ToListAsync();
                     int newID = cartItem.Count + 1;
 
                     cart.CartItems.Add(new CartItem
                     {
                         CartItemID = newID,
-                        Dish = dish,
-                        Quantity = quantity
+                        Dish = dish
                     });
-                }
-                else
-                {
-                    item.Quantity += quantity;
-                }
+
 
                 _context.Update(cart);
                 await _context.SaveChangesAsync();
