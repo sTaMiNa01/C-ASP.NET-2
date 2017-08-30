@@ -60,11 +60,7 @@ namespace OnlinePizza.Controllers
 
             }).ToListAsync();
 
-            var viewModel = new DishViewModel()
-            {
-                Ingredients = allIngredients,
-                Categories = allCategories
-            };
+            var viewModel = new DishViewModel() { Ingredients = allIngredients, Categories = allCategories };
 
             return View(viewModel);
         }

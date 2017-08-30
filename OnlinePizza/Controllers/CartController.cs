@@ -48,7 +48,6 @@ namespace OnlinePizza.Controllers
         public async Task<ActionResult> AddToCart(int Id)
         {
             Dish dish = _context.Dishes.FirstOrDefault(p => p.ID == Id);
-            var quantity = 1;
 
             if (HttpContext.Session.GetInt32("Cart") == null)
             {
@@ -57,9 +56,7 @@ namespace OnlinePizza.Controllers
                 var carts = await _context.Carts.ToListAsync();
                 int newID = carts.Count + 1;
 
-                cartItems.Add(new CartItem {
-                    Dish = dish
-                });
+                cartItems.Add(new CartItem { Dish = dish });
 
                 cart.CartID = newID;
                 cart.CartItems = cartItems;
@@ -77,12 +74,7 @@ namespace OnlinePizza.Controllers
                     var cartItem = await _context.CartItems.ToListAsync();
                     int newID = cartItem.Count + 1;
 
-                    cart.CartItems.Add(new CartItem
-                    {
-                        CartItemID = newID,
-                        Dish = dish
-                    });
-
+                    cart.CartItems.Add(new CartItem { CartItemID = newID, Dish = dish });
 
                 _context.Update(cart);
                 await _context.SaveChangesAsync();
