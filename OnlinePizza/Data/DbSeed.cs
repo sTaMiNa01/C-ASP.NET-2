@@ -50,15 +50,20 @@ namespace OnlinePizza.Data
                 var pastaPenne = new Ingredient { IngredientID = 9, IngredientName = "Pasta penne", Price = 10 };
                 var bolognese = new Ingredient { IngredientID = 10, IngredientName = "Bolognese", Price = 20 };
 
-                var vesuvio = new Dish() { ID = 1, DishName = "Vesuvio", Price = 75, Category = pizza };
-                var hawaii = new Dish() { ID = 2, DishName = "Hawaii", Price = 80, Category = pizza };
-                var margaritha = new Dish() {ID = 3, DishName = "Margaritha", Price = 70, Category = pizza };
-                var carbonara = new Dish() { ID = 4, DishName = "Carbonara", Price = 75, Category = pasta };
-                var pastaBolognese = new Dish() { ID = 5, DishName = "Pasta Bolognese", Price = 80, Category = pasta };
-                var veggiPasta = new Dish() { ID = 6, DishName = "Veggi Pasta", Price = 70, Category = pasta };
-                var veggiSalad = new Dish() { ID = 7, DishName = "Veggi Salad", Price = 60, Category = salad };
-                var cheeseSalad = new Dish() { ID = 8, DishName = "Cheese Salad", Price = 65, Category = salad };
-                var hamSalad = new Dish() { ID = 9, DishName = "Ham Salad", Price = 70 };
+                var vesuvioIngredients = new List<DishIngredient>();
+                var carbonaraIngredients = new List<DishIngredient>();
+                var hawaiiIngredients = new List<DishIngredient>();
+                var margarithaIngredients = new List<DishIngredient>();
+
+                var vesuvio = new Dish() { ID = 1, DishName = "Vesuvio", Price = 75, CategoryID = pizza.CategoryID, DishIngredients = vesuvioIngredients, Category = pizza };
+                var hawaii = new Dish() { ID = 2, DishName = "Hawaii", Price = 80, CategoryID = pizza.CategoryID, DishIngredients = hawaiiIngredients, Category = pizza };
+                var margaritha = new Dish() {ID = 3, DishName = "Margaritha", Price = 70, CategoryID = pizza.CategoryID, DishIngredients = margarithaIngredients, Category = pizza };
+                var carbonara = new Dish() { ID = 4, DishName = "Carbonara", Price = 75, CategoryID = pasta.CategoryID, DishIngredients = carbonaraIngredients, Category = pasta };
+                var pastaBolognese = new Dish() { ID = 5, DishName = "Pasta Bolognese", Price = 80, CategoryID = pasta.CategoryID, Category = pasta };
+                var veggiPasta = new Dish() { ID = 6, DishName = "Veggi Pasta", Price = 70, CategoryID = pasta.CategoryID, Category = pasta };
+                var veggiSalad = new Dish() { ID = 7, DishName = "Veggi Salad", Price = 60, CategoryID = salad.CategoryID, Category =salad };
+                var cheeseSalad = new Dish() { ID = 8, DishName = "Cheese Salad", Price = 65, CategoryID = salad.CategoryID, Category = salad };
+                var hamSalad = new Dish() { ID = 9, DishName = "Ham Salad", Price = 70, CategoryID = salad.CategoryID, Category = salad };
 
                 var vesuvioCheese = new DishIngredient { Dish = margaritha, Ingredient = cheese };
                 var vesuvioTomato = new DishIngredient { Dish = margaritha, Ingredient = tomato };
@@ -72,33 +77,29 @@ namespace OnlinePizza.Data
                 var margarithaTomato = new DishIngredient { Dish = margaritha, Ingredient = tomato };
                 var margarithaCheese = new DishIngredient { Dish = margaritha, Ingredient = cheese };
 
-                var carbonaraCheese = new DishIngredient { Dish = carbonara, Ingredient = cheese };
-                var carrbonaraHam = new DishIngredient { Dish = carbonara, Ingredient = ham };
-                var carbonaraCream = new DishIngredient { Dish = carbonara, Ingredient = cream };
+                var carbonaraCheese = new DishIngredient { Dish = carbonara, DishID = carbonara.ID, Ingredient = cheese, IngredientID = cheese.IngredientID };
+                var carrbonaraHam = new DishIngredient { Dish = carbonara, DishID = carbonara.ID, Ingredient = ham, IngredientID = ham.IngredientID };
+                var carbonaraCream = new DishIngredient { Dish = carbonara, DishID = carbonara.ID, Ingredient = cream, IngredientID = cream.IngredientID };
 
-                vesuvio.DishIngredients = new List<DishIngredient>();
-                vesuvio.DishIngredients.Add(vesuvioCheese);
-                vesuvio.DishIngredients.Add(vesuvioHam);
-                vesuvio.DishIngredients.Add(vesuvioTomato);
+                vesuvioIngredients.Add(vesuvioCheese);
+                vesuvioIngredients.Add(vesuvioHam);
+                vesuvioIngredients.Add(vesuvioTomato);
 
-                hawaii.DishIngredients = new List<DishIngredient>();
-                hawaii.DishIngredients.Add(hawaiiTomato);
-                hawaii.DishIngredients.Add(hawaiiCheese);
-                hawaii.DishIngredients.Add(hawaiiPineapple);
-                hawaii.DishIngredients.Add(hawaiiHam);
+                hawaiiIngredients.Add(hawaiiTomato);
+                hawaiiIngredients.Add(hawaiiCheese);
+                hawaiiIngredients.Add(hawaiiPineapple);
+                hawaiiIngredients.Add(hawaiiHam);
 
-                margaritha.DishIngredients = new List<DishIngredient>();
-                margaritha.DishIngredients.Add(margarithaTomato);
-                margaritha.DishIngredients.Add(margarithaCheese);
+                margarithaIngredients.Add(margarithaTomato);
+                margarithaIngredients.Add(margarithaCheese);
 
-                carbonara.DishIngredients = new List<DishIngredient>();
-                carbonara.DishIngredients.Add(carbonaraCheese);
-                carbonara.DishIngredients.Add(carbonaraCream);
-                carbonara.DishIngredients.Add(carrbonaraHam);
+                carbonaraIngredients.Add(carbonaraCheese);
+                carbonaraIngredients.Add(carbonaraCream);
+                carbonaraIngredients.Add(carrbonaraHam);
 
-                context.AddRange(vesuvio, hawaii, margaritha, carbonara, pastaBolognese, veggiPasta, veggiSalad, cheeseSalad, hamSalad);
                 context.AddRange(cheese, ham, tomato, pineapple, greenSalad, pastaPenne, bolognese, olive, pepper, cream);
                 context.AddRange(pizza, pasta, salad);
+                context.AddRange(vesuvio, hawaii, margaritha, carbonara, pastaBolognese, veggiPasta, veggiSalad, cheeseSalad, hamSalad);
 
                 context.SaveChanges();
             }

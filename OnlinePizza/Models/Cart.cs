@@ -9,7 +9,7 @@ namespace OnlinePizza.Models
     {
         public int CartID { get; set; }
         public ApplicationUser Customer { get; set; }
-        public int CUstomerID { get; set; }
+        public int CustomerID { get; set; }
         public List<CartItem> CartItems { get; set; }
         public int TotalAmount { get; set; }
     }
