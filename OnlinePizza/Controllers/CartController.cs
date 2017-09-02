@@ -142,7 +142,7 @@ namespace OnlinePizza.Controllers
         {
             var cartID = HttpContext.Session.GetInt32("Cart");
             Cart cart = await _context.Carts.Include(x => x.CartItems).ThenInclude(z => z.Dish).SingleOrDefaultAsync(y => y.CartID == cartID);
-            var cartItem = _context.CartItems.First(ci => ci.CartItemID == id);
+            var cartItem = _context.CartItems.FirstOrDefault(ci => ci.CartItemID == id);
 
             if (cartItem != null)
             {

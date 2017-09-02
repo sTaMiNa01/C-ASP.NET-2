@@ -54,16 +54,21 @@ namespace OnlinePizza.Data
                 var carbonaraIngredients = new List<DishIngredient>();
                 var hawaiiIngredients = new List<DishIngredient>();
                 var margarithaIngredients = new List<DishIngredient>();
+                var pastaBologneseIngredients = new List<DishIngredient>();
+                var veggiPastaIngredients = new List<DishIngredient>();
+                var veggiSaladIngredients = new List<DishIngredient>();
+                var cheeseSaladIngredients = new List<DishIngredient>();
+                var hamSaladIngredients = new List<DishIngredient>();
 
                 var vesuvio = new Dish() { ID = 1, DishName = "Vesuvio", Price = 75, CategoryID = pizza.CategoryID, DishIngredients = vesuvioIngredients, Category = pizza };
                 var hawaii = new Dish() { ID = 2, DishName = "Hawaii", Price = 80, CategoryID = pizza.CategoryID, DishIngredients = hawaiiIngredients, Category = pizza };
                 var margaritha = new Dish() {ID = 3, DishName = "Margaritha", Price = 70, CategoryID = pizza.CategoryID, DishIngredients = margarithaIngredients, Category = pizza };
                 var carbonara = new Dish() { ID = 4, DishName = "Carbonara", Price = 75, CategoryID = pasta.CategoryID, DishIngredients = carbonaraIngredients, Category = pasta };
-                var pastaBolognese = new Dish() { ID = 5, DishName = "Pasta Bolognese", Price = 80, CategoryID = pasta.CategoryID, Category = pasta };
-                var veggiPasta = new Dish() { ID = 6, DishName = "Veggi Pasta", Price = 70, CategoryID = pasta.CategoryID, Category = pasta };
-                var veggiSalad = new Dish() { ID = 7, DishName = "Veggi Salad", Price = 60, CategoryID = salad.CategoryID, Category =salad };
-                var cheeseSalad = new Dish() { ID = 8, DishName = "Cheese Salad", Price = 65, CategoryID = salad.CategoryID, Category = salad };
-                var hamSalad = new Dish() { ID = 9, DishName = "Ham Salad", Price = 70, CategoryID = salad.CategoryID, Category = salad };
+                var pastaBolognese = new Dish() { ID = 5, DishName = "Pasta Bolognese", Price = 80, CategoryID = pasta.CategoryID, Category = pasta, DishIngredients = pastaBologneseIngredients };
+                var veggiPasta = new Dish() { ID = 6, DishName = "Veggi Pasta", Price = 70, CategoryID = pasta.CategoryID, Category = pasta, DishIngredients = veggiPastaIngredients };
+                var veggiSalad = new Dish() { ID = 7, DishName = "Veggi Salad", Price = 60, CategoryID = salad.CategoryID, Category = salad, DishIngredients = veggiSaladIngredients };
+                var cheeseSalad = new Dish() { ID = 8, DishName = "Cheese Salad", Price = 65, CategoryID = salad.CategoryID, Category = salad, DishIngredients = cheeseSaladIngredients };
+                var hamSalad = new Dish() { ID = 9, DishName = "Ham Salad", Price = 70, CategoryID = salad.CategoryID, Category = salad, DishIngredients = hamSaladIngredients };
 
                 var vesuvioCheese = new DishIngredient { Dish = margaritha, Ingredient = cheese };
                 var vesuvioTomato = new DishIngredient { Dish = margaritha, Ingredient = tomato };
@@ -77,9 +82,13 @@ namespace OnlinePizza.Data
                 var margarithaTomato = new DishIngredient { Dish = margaritha, Ingredient = tomato };
                 var margarithaCheese = new DishIngredient { Dish = margaritha, Ingredient = cheese };
 
+                var pastaBolognesePasta = new DishIngredient { Dish = pastaBolognese, Ingredient = pastaPenne };
+                var pastaBologneseMeat = new DishIngredient { Dish = pastaBolognese, Ingredient = bolognese };
+
                 var carbonaraCheese = new DishIngredient { Dish = carbonara, DishID = carbonara.ID, Ingredient = cheese, IngredientID = cheese.IngredientID };
                 var carrbonaraHam = new DishIngredient { Dish = carbonara, DishID = carbonara.ID, Ingredient = ham, IngredientID = ham.IngredientID };
                 var carbonaraCream = new DishIngredient { Dish = carbonara, DishID = carbonara.ID, Ingredient = cream, IngredientID = cream.IngredientID };
+                var carbonaraPasta = new DishIngredient { Dish = carbonara, DishID = carbonara.ID, Ingredient = pastaPenne, IngredientID = pastaPenne.IngredientID };
 
                 vesuvioIngredients.Add(vesuvioCheese);
                 vesuvioIngredients.Add(vesuvioHam);
@@ -96,6 +105,11 @@ namespace OnlinePizza.Data
                 carbonaraIngredients.Add(carbonaraCheese);
                 carbonaraIngredients.Add(carbonaraCream);
                 carbonaraIngredients.Add(carrbonaraHam);
+                carbonaraIngredients.Add(carbonaraPasta);
+
+                pastaBologneseIngredients.Add(pastaBolognesePasta);
+                pastaBologneseIngredients.Add(pastaBologneseMeat);
+
 
                 context.AddRange(cheese, ham, tomato, pineapple, greenSalad, pastaPenne, bolognese, olive, pepper, cream);
                 context.AddRange(pizza, pasta, salad);
