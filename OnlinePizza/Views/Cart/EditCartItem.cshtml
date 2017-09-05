@@ -1,0 +1,38 @@
+﻿@model OnlinePizza.Models.CartItem
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditCartItem">
+            <input asp-for="@Model.CartItemID" type="hidden" value="@Model.CartItemID" />
+            <div class="form-group">
+                <h3>@Model.Dish.DishName</h3> <h4>@Model.Dish.Price kr</h4>
+            </div>
+            <div class="form-group">
+                <br />
+                <label asp-for="CartItemIngredients" class="control-label">Ingridents:</label>
+                <br />
+                @for (int i = 0; i < Model.CartItemIngredients.Count; i++)
+                {
+                    <label>@Model.CartItemIngredients[i].IngredientName</label>
+                    <input asp-for="@Model.CartItemIngredients[i].Selected" type="checkbox" />
+                    <input asp-for="@Model.CartItemIngredients[i].CartItemIngredientID" value="@Model.CartItemIngredients[i].CartItemIngredientID" type="hidden" />
+                }
+                <br />
+                <br />
+                <label asp-for="ExtraCartItemIngredients" class="control-label">Extra ingredients:</label>
+                <br />
+                @for (int i = 0; i < Model.ExtraCartItemIngredients.Count; i++)
+                {
+                    <label>@Model.ExtraCartItemIngredients[i].IngredientName</label>
+                    <label>@Model.ExtraCartItemIngredients[i].CartItemIngredientPrice kr</label>
+                    <input asp-for="@Model.ExtraCartItemIngredients[i].Selected" type="checkbox" />
+                    <input asp-for="@Model.ExtraCartItemIngredients[i].CartItemIngredientID" value="@Model.ExtraCartItemIngredients[i].CartItemIngredientID" type="hidden" />
+                }
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+    <a asp-action="Index">Back to List</a>
+</div>

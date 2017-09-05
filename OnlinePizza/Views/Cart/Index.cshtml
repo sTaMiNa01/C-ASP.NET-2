@@ -11,6 +11,9 @@
             <th>
                <h4>Price</h4>
             </th>
+            <th>
+                <p><a asp-controller="Cart" asp-action="ClearCart">Clear Cart</a></p>
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -24,7 +27,8 @@
                     @Html.DisplayFor(modelItem => item.Dish.Price) kr
                 </td>
                 <td>
-                    <a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-id="@item.CartItemID">Remove</a>
+                    <a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-id="@item.CartItemID">Remove</a> <a>|</a> 
+                    <a asp-controller="Cart" asp-action="EditCartItem" asp-route-id="@item.CartItemID">Edit</a>
                 </td>
             </tr>
             
