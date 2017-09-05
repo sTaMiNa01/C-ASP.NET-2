@@ -130,7 +130,6 @@ namespace OnlinePizza.Controllers
             return RedirectToAction("Index", "Dishes");
         }
 
-
         public async Task<ActionResult> EditCartItem(Guid id)
         {
             CartItem cartItem = _context.CartItems.Include(x => x.CartItemIngredients).Include(z => z.Dish).SingleOrDefault(y => y.CartItemID == id);
@@ -167,9 +166,22 @@ namespace OnlinePizza.Controllers
                     };
 
                     cartItem.CartItemIngredients.Add(newCartItemIngredient);
-                    cartItem.Price = cartItem.Price + newIngredient.CartItemIngredientPrice;
+                    cartItem.Price = cartItem.Dish.Price + newIngredient.CartItemIngredientPrice;
                     cartItem.ExtraCartItemIngredients = clearExtraIngredients;
                 }
+            }
+
+            foreach (var orginalIngredient in model.CartItemIngredients)
+            {
+                CartItemIngredient ingredientToRemove = _context.CartItemIngredients.SingleOrDefault(s => s.CartItemIngredientID == orginalIngredient.CartItemIngredientID);
+
+                if (!orginalIngredient.Selected && cartItem.CartItemIngredients.Any(x => x.CartItemIngredientID.Equals(orginalIngredient.CartItemIngredientID)))
+                {
+                    cartItem.CartItemIngredients.RemoveAll(x => x.CartItemIngredientID.Equals(orginalIngredient.CartItemIngredientID));
+                    cartItem.Price = cartItem.Price - ingredientToRemove.CartItemIngredientPrice;
+                    cartItem.ExtraCartItemIngredients = clearExtraIngredients;
+                }
+
             }
 
             _context.Update(cartItem);
@@ -177,6 +189,7 @@ namespace OnlinePizza.Controllers
 
             return RedirectToAction("Index");
         }
+
         public async Task<ActionResult> RemoveFromCart(Guid id)
         {
             var cartID = HttpContext.Session.GetInt32("Cart");
