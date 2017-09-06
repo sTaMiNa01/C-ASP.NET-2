@@ -150,38 +150,55 @@ namespace OnlinePizza.Controllers
             CartItem cartItem = _context.CartItems.Include(x => x.CartItemIngredients).Include(i => i.ExtraCartItemIngredients).Include(z => z.Dish).SingleOrDefault(y => y.CartItemID == model.CartItemID);
             List<CartItemIngredient> clearExtraIngredients = new List<CartItemIngredient>();
 
-            foreach (var ingredient in model.ExtraCartItemIngredients)
+            if(model.ExtraCartItemIngredients == null)
             {
-                if (ingredient.Selected && !cartItem.CartItemIngredients.Any(x => x.CartItemIngredientID.Equals(ingredient.CartItemIngredientID)))
-                {
-                    CartItemIngredient newIngredient = _context.CartItemIngredients.SingleOrDefault(s => s.CartItemIngredientID == ingredient.CartItemIngredientID);
-                    var newCartItemIngredient = new CartItemIngredient
-                    {
-                        CartItem = cartItem,
-                        CartItemID = cartItem.CartItemID,
-                        IngredientName = newIngredient.IngredientName,
-                        CartItemIngredientPrice = newIngredient.CartItemIngredientPrice,
-                        Selected = true,
-                        CartItemIngredientID = GenerateCartItemIngredientID()
-                    };
 
-                    cartItem.CartItemIngredients.Add(newCartItemIngredient);
-                    cartItem.Price = cartItem.Dish.Price + newIngredient.CartItemIngredientPrice;
-                    cartItem.ExtraCartItemIngredients = clearExtraIngredients;
+                return RedirectToAction("Index");
+
+            } else
+            {
+                foreach (var ingredient in model.ExtraCartItemIngredients)
+                {
+                    if (ingredient.Selected && !cartItem.CartItemIngredients.Any(x => x.CartItemIngredientID.Equals(ingredient.CartItemIngredientID)))
+                    {
+                        CartItemIngredient newIngredient = _context.CartItemIngredients.SingleOrDefault(s => s.CartItemIngredientID == ingredient.CartItemIngredientID);
+                        var newCartItemIngredient = new CartItemIngredient
+                        {
+                            CartItem = cartItem,
+                            CartItemID = cartItem.CartItemID,
+                            IngredientName = newIngredient.IngredientName,
+                            CartItemIngredientPrice = newIngredient.CartItemIngredientPrice,
+                            Selected = true,
+                            CartItemIngredientID = GenerateCartItemIngredientID()
+                        };
+
+                        cartItem.CartItemIngredients.Add(newCartItemIngredient);
+                        cartItem.Price = cartItem.Price + newIngredient.CartItemIngredientPrice;
+                        cartItem.ExtraCartItemIngredients = clearExtraIngredients;
+                    }
                 }
             }
 
-            foreach (var orginalIngredient in model.CartItemIngredients)
+            if (model.CartItemIngredients == null)
             {
-                CartItemIngredient ingredientToRemove = _context.CartItemIngredients.SingleOrDefault(s => s.CartItemIngredientID == orginalIngredient.CartItemIngredientID);
 
-                if (!orginalIngredient.Selected && cartItem.CartItemIngredients.Any(x => x.CartItemIngredientID.Equals(orginalIngredient.CartItemIngredientID)))
+                return RedirectToAction("Index");
+
+            }
+            else
+            {
+                foreach (var orginalIngredient in model.CartItemIngredients)
                 {
-                    cartItem.CartItemIngredients.RemoveAll(x => x.CartItemIngredientID.Equals(orginalIngredient.CartItemIngredientID));
-                    cartItem.Price = cartItem.Price - ingredientToRemove.CartItemIngredientPrice;
-                    cartItem.ExtraCartItemIngredients = clearExtraIngredients;
-                }
+                    CartItemIngredient ingredientToRemove = _context.CartItemIngredients.SingleOrDefault(s => s.CartItemIngredientID == orginalIngredient.CartItemIngredientID);
 
+                    if (!orginalIngredient.Selected && cartItem.CartItemIngredients.Any(x => x.CartItemIngredientID.Equals(orginalIngredient.CartItemIngredientID)))
+                    {
+                        cartItem.CartItemIngredients.RemoveAll(x => x.CartItemIngredientID.Equals(orginalIngredient.CartItemIngredientID));
+                        cartItem.Price = cartItem.Price - ingredientToRemove.CartItemIngredientPrice;
+                        cartItem.ExtraCartItemIngredients = clearExtraIngredients;
+                    }
+
+                }
             }
 
             _context.Update(cartItem);

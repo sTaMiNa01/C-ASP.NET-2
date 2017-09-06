@@ -58,6 +58,7 @@ namespace OnlinePizza.Controllers
             {
                 Username = user.UserName,
                 Email = user.Email,
+                Name = user.Name,
                 Street = user.Street,
                 Zipcode = user.Zipcode,
                 City = user.City,
@@ -91,6 +92,17 @@ namespace OnlinePizza.Controllers
                 if (!setEmailResult.Succeeded)
                 {
                     throw new ApplicationException($"Unexpected error occurred setting email for user with ID '{user.Id}'.");
+                }
+            }
+
+            var name = user.Name;
+            if (model.Name != name)
+            {
+                user.Name = model.Name;
+                var setName = await _userManager.UpdateAsync(user);
+                if (!setName.Succeeded)
+                {
+                    throw new ApplicationException($"Unexpected error occurred setting name for user with ID '{user.Id}'.");
                 }
             }
 

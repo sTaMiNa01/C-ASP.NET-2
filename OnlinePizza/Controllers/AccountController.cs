@@ -220,7 +220,7 @@ namespace OnlinePizza.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Street = model.Street,
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Name = model.Name, Street = model.Street,
                                                  Zipcode = model.Zipcode, City = model.City };
 
                 var result = await _userManager.CreateAsync(user, model.Password);

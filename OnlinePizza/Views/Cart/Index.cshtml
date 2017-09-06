@@ -11,9 +11,6 @@
             <th>
                <h4>Price</h4>
             </th>
-            <th>
-                <p><a asp-controller="Cart" asp-action="ClearCart">Clear Cart</a></p>
-            </th>
         </tr>
     </thead>
     <tbody>
@@ -35,3 +32,7 @@
           }
     </tbody>
 </table>
+<div>
+    <a asp-controller="Payment" asp-action="Pay" class="btn btn-default">Check out</a>
+    <a asp-controller="Cart" asp-action="ClearCart" class="btn btn-default">Clear Cart</a>
+</div>

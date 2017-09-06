@@ -33,5 +33,9 @@ namespace OnlinePizza.Models.ManageViewModels
         [StringLength(100)]
         public string City { get; set; }
 
+        [Display(Name = "Name")]
+        [StringLength(100)]
+        public string Name { get; set; }
+
     }
 }
