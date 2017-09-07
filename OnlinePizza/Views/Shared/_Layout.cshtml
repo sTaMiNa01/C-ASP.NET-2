@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - OnlinePizza</title>
 
+    <script src="https://use.fontawesome.com/7ad4210f10.js"></script>
+
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
@@ -37,16 +39,16 @@
                         <li><a asp-area="" asp-controller="Ingredients" asp-action="Index">Ingredient</a></li>
                         <li><a asp-area="" asp-controller="Categories" asp-action="Index">Category</a></li>
                         <li><a asp-area="" asp-controller="Dishes" asp-action="Create">Create new dish</a></li>
-                        <li><a asp-area="" asp-controller="Cart" asp-action="Index">Cart</a></li>
+                        <li><a asp-area="" asp-controller="Cart" asp-action="Index"><i class="fa fa-shopping-cart fa-1x" aria-hidden="true" style="color:white;"></i></a></li>
 
-                                        }
-        else
-        {
+                     }
+                        else
+                    {
 
-            <li><a asp-area="" asp-controller="Dishes" asp-action="Index">Meny</a></li>
-            <li><a asp-area="" asp-controller="Cart" asp-action="Index">Cart</a></li>
+                            <li><a asp-area="" asp-controller="Dishes" asp-action="Index">Meny</a></li>
+                            <li><a asp-area="" asp-controller="Cart" asp-action="Index"><i class="fa fa-shopping-cart fa-1x" aria-hidden="true" style="color:white;"></i></a></li>
 
-        }
+                     }
 
 
                 </ul>

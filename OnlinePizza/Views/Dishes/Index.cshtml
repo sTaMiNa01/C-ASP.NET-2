@@ -21,8 +21,7 @@
         </tr>
     </thead>
     <tbody>
-
-@foreach (var item in Model.OrderBy(x => x.Category)) {
+       @foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.DishName)
@@ -37,20 +36,24 @@
                     <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> <a>|</a>
                     <a asp-action="Details" asp-route-id="@item.ID">Details</a> <a>|</a>
                     <a asp-action="Delete" asp-route-id="@item.ID">Delete</a> <a>|</a>
-                    <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@item.ID">Buy</a>
+                    <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@item.ID"><i class="fa fa-cart-plus " aria-hidden="true" style="color:black;"></i></a>
 
 
                 }
                 else
                 {
 
-                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> <a>|</a>
-                    <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@item.ID">Buy</a>
+                    <a asp-action="Details" asp-route-id="@item.ID"><i class="fa fa-info-circle " aria-hidden="true" style="color:black;"></i></a> <a>|</a>
+                    <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@item.ID"><i class="fa fa-cart-plus " aria-hidden="true" style="color:black;"></i></a>
 
                 }
 
             </td>
         </tr>
 }
+
     </tbody>
 </table>
+@*<div class="cart">
+    @{Html.RenderPartial("_CartPartial");}
+</div>*@
