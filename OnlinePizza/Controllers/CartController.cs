@@ -8,16 +8,19 @@ using OnlinePizza.Data;
 using OnlinePizza.Models;
 using Microsoft.EntityFrameworkCore;
 using OnlinePizza.ViewModels;
+using OnlinePizza.Services;
 
 namespace OnlinePizza.Controllers
 {
     public class CartController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly CartService _cartService;
 
-        public CartController(ApplicationDbContext context)
+        public CartController(ApplicationDbContext context, CartService cartService)
         {
             _context = context;
+            _cartService = cartService;
         }
 
         public async Task<ActionResult> Index()
@@ -47,83 +50,22 @@ namespace OnlinePizza.Controllers
         public async Task<ActionResult> AddToCart(int? Id)
         {
             var dish = await _context.Dishes.Include(x => x.Category).Include(x => x.DishIngredients).ThenInclude(x => x.Ingredient).SingleOrDefaultAsync(m => m.ID == Id);
-            List<CartItemIngredient> cartItemIngredient = new List<CartItemIngredient>();
-            CartItem cartItem = new CartItem();
+            int cartsID;
 
             if (HttpContext.Session.GetInt32("Cart") == null)
             {
-                Cart cart = new Cart();
-                List<CartItem> cartItems = new List<CartItem>();
-                var carts = await _context.Carts.ToListAsync();
-                int newID = carts.Count + 1;
-                var newCartItemID = Guid.NewGuid();
+                var newCart = await _cartService.AddToNewCart(dish);
+                cartsID = newCart.CartID;
 
-                foreach (var item in dish.DishIngredients)
-                {
+                HttpContext.Session.SetInt32("Cart", cartsID);
 
-                    var newCartItemIngredient = new CartItemIngredient
-                    {
-                        CartItem = cartItem,
-                        CartItemID = newCartItemID,
-                        IngredientName = item.Ingredient.IngredientName,
-                        CartItemIngredientPrice = item.Ingredient.Price,
-                        Selected = true,
-                        CartItemIngredientID = GenerateCartItemIngredientID()
-                    };
-
-                    cartItemIngredient.Add(newCartItemIngredient);
-                }
-
-                cartItems.Add(new CartItem
-                {
-                    Dish = dish,
-                    CartID = newID,
-                    Cart = cart,
-                    CartItemIngredients = cartItemIngredient,
-                    CartItemID = newCartItemID,
-                    Price = dish.Price
-                });
-
-                cart.CartID = newID;
-                cart.CartItems = cartItems;
-
-                HttpContext.Session.SetInt32("Cart", newID);
-
-                await _context.Carts.AddAsync(cart);
-                await _context.SaveChangesAsync();
 
             } else
             {
                 var cartID = HttpContext.Session.GetInt32("Cart");
                 Cart cart = await _context.Carts.Include(x => x.CartItems).ThenInclude(z => z.Dish).SingleOrDefaultAsync(y => y.CartID == cartID);
 
-                var newCartItemID = Guid.NewGuid();
-
-                foreach (var item in dish.DishIngredients)
-                {
-
-                    var newCartItemIngredient = new CartItemIngredient
-                    {
-                        CartItem = cartItem,
-                        CartItemID = newCartItemID,
-                        IngredientName = item.Ingredient.IngredientName,
-                        CartItemIngredientPrice = item.Ingredient.Price,
-                        Selected = true,
-                        CartItemIngredientID = GenerateCartItemIngredientID()
-                    };
-
-                    cartItemIngredient.Add(newCartItemIngredient);
-                }
-
-                cartItem.CartItemID = newCartItemID;
-                cartItem.Dish = dish;
-                cartItem.Cart = cart;
-                cartItem.CartID = cart.CartID;
-                cartItem.CartItemIngredients = cartItemIngredient;
-                cartItem.Price = dish.Price;
-
-                _context.CartItems.Add(cartItem);
-                await _context.SaveChangesAsync();
+                var addToCart = await _cartService.AddToExistingCart(dish, cart);
 
             }
 
@@ -134,7 +76,7 @@ namespace OnlinePizza.Controllers
         {
             CartItem cartItem = _context.CartItems.Include(x => x.CartItemIngredients).Include(z => z.Dish).SingleOrDefault(y => y.CartItemID == id);
             var extra = _context.Ingredients.Where(x => !cartItem.CartItemIngredients.Any(s => s.IngredientName.Equals(x.IngredientName))).ToList();
-            var extraIngredients = extra.Select(x => new CartItemIngredient() { CartItemIngredientID = GenerateCartItemIngredientID(), CartItemID = Guid.NewGuid(), IngredientName = x.IngredientName, Selected = false, CartItemIngredientPrice = x.Price }).ToList();
+            var extraIngredients = extra.Select(x => new CartItemIngredient() { CartItemIngredientID = _cartService.GenerateCartItemIngredientID(), CartItemID = Guid.NewGuid(), IngredientName = x.IngredientName, Selected = false, CartItemIngredientPrice = x.Price }).ToList();
 
             cartItem.ExtraCartItemIngredients = extraIngredients;
 
@@ -169,7 +111,7 @@ namespace OnlinePizza.Controllers
                             IngredientName = newIngredient.IngredientName,
                             CartItemIngredientPrice = newIngredient.CartItemIngredientPrice,
                             Selected = true,
-                            CartItemIngredientID = GenerateCartItemIngredientID()
+                            CartItemIngredientID = _cartService.GenerateCartItemIngredientID()
                         };
 
                         cartItem.CartItemIngredients.Add(newCartItemIngredient);
@@ -236,12 +178,6 @@ namespace OnlinePizza.Controllers
             return RedirectToAction("Index", "Dishes");
         }
 
-        public int GenerateCartItemIngredientID()
-        {
-            int _min = 1000;
-            int _max = 9999;
-            Random _rdm = new Random();
-            return _rdm.Next(_min, _max);
-        }
+
     }
 }

@@ -29,8 +29,7 @@ namespace OnlinePizza.Controllers
         [HttpGet]
         public async Task<IActionResult> Pay()
         {
-            
-
+           
             if (HttpContext.Session.GetInt32("Cart") == null)
             {
                 return RedirectToAction("Index", "Dishes");
