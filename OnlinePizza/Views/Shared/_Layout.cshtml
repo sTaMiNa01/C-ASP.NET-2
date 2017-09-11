@@ -10,6 +10,8 @@
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
+        <link href="~/css/PizzaStyle.css" rel="stylesheet" />
+        <link href='https://fonts.googleapis.com/css?family=Alegreya Sans SC' rel='stylesheet'>
     </environment>
     <environment exclude="Development">
         @*<link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -19,8 +21,8 @@
     </environment>
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
+    <nav class="navbar navbar-fixed-top nav-color">
+        <div class="container hight">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -28,24 +30,24 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">OnlinePizza</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand text-color M">M</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
 
                     @if (User.IsInRole("Admin"))
                     {
-                        <li><a asp-area="" asp-controller="Dishes" asp-action="Index">Meny</a></li>
-                        <li><a asp-area="" asp-controller="Ingredients" asp-action="Index">Ingredient</a></li>
-                        <li><a asp-area="" asp-controller="Categories" asp-action="Index">Category</a></li>
-                        <li><a asp-area="" asp-controller="Dishes" asp-action="Create">Create new dish</a></li>
-                        <li><a asp-area="" asp-controller="Cart" asp-action="Index"><i class="fa fa-shopping-cart fa-1x" aria-hidden="true" style="color:white;"></i></a></li>
+                        <li><a asp-area="" asp-controller="Dishes" asp-action="Index" class="text-color">Meny</a></li>
+                        <li><a asp-area="" asp-controller="Ingredients" asp-action="Index" class="text-color">Ingredient</a></li>
+                        <li><a asp-area="" asp-controller="Categories" asp-action="Index" class="text-color">Category</a></li>
+                        <li><a asp-area="" asp-controller="Dishes" asp-action="Create" class="text-color">Create new dish</a></li>
+                        <li><a asp-area="" asp-controller="Cart" asp-action="Index" class="text-color"><i class="fa fa-shopping-cart fa-1x" aria-hidden="true" style="color:white;"></i></a></li>
 
                      }
                         else
                     {
 
-                            <li><a asp-area="" asp-controller="Dishes" asp-action="Index">Meny</a></li>
+                            <li><a asp-area="" asp-controller="Dishes" asp-action="Index" class="text-color">Meny</a></li>
                             <li><a asp-area="" asp-controller="Cart" asp-action="Index"><i class="fa fa-shopping-cart fa-1x" aria-hidden="true" style="color:white;"></i></a></li>
 
                      }
