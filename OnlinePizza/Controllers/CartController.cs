@@ -25,30 +25,8 @@ namespace OnlinePizza.Controllers
 
         public async Task<ActionResult> Index()
         {
-            List<CartItem> cartItems = new List<CartItem>();
+            List<CartItem> cartItems = await _cartService.GetCartItems();
 
-            if (HttpContext.Session.GetInt32("Cart") == null)
-            {
-                var carts = await _context.Carts.ToListAsync();
-                var newID = HttpContext.Session.GetInt32("Cart");
-                newID = carts.Count + 1;
-                cartItems = new List<CartItem>();
-            }
-            else
-            {
-                Cart cart = new Cart();
-
-                var cartID = HttpContext.Session.GetInt32("Cart");
-
-                cart = await _context.Carts
-                    .Include(x => x.CartItems)
-                    .ThenInclude(z => z.Dish)
-                    .SingleOrDefaultAsync(y => y.CartID == cartID);
-
-                cartItems = cart.CartItems;
-
-                ViewData["CartItemsList"] = cartItems;
-            }
             return View(cartItems);
         }
 
