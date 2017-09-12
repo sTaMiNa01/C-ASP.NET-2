@@ -40,16 +40,26 @@ namespace OnlinePizza.Controllers
 
                 var cartID = HttpContext.Session.GetInt32("Cart");
 
-                cart = await _context.Carts.Include(x => x.CartItems).ThenInclude(z => z.Dish).SingleOrDefaultAsync(y => y.CartID == cartID);
+                cart = await _context.Carts
+                    .Include(x => x.CartItems)
+                    .ThenInclude(z => z.Dish)
+                    .SingleOrDefaultAsync(y => y.CartID == cartID);
+
                 cartItems = cart.CartItems;
 
+                ViewData["CartItemsList"] = cartItems;
             }
             return View(cartItems);
         }
 
         public async Task<ActionResult> AddToCart(int? Id)
         {
-            var dish = await _context.Dishes.Include(x => x.Category).Include(x => x.DishIngredients).ThenInclude(x => x.Ingredient).SingleOrDefaultAsync(m => m.ID == Id);
+            var dish = await _context.Dishes
+                .Include(x => x.Category)
+                .Include(x => x.DishIngredients)
+                .ThenInclude(x => x.Ingredient)
+                .SingleOrDefaultAsync(m => m.ID == Id);
+
             int cartsID;
 
             if (HttpContext.Session.GetInt32("Cart") == null)
@@ -63,7 +73,10 @@ namespace OnlinePizza.Controllers
             } else
             {
                 var cartID = HttpContext.Session.GetInt32("Cart");
-                Cart cart = await _context.Carts.Include(x => x.CartItems).ThenInclude(z => z.Dish).SingleOrDefaultAsync(y => y.CartID == cartID);
+                Cart cart = await _context.Carts
+                    .Include(x => x.CartItems)
+                    .ThenInclude(z => z.Dish)
+                    .SingleOrDefaultAsync(y => y.CartID == cartID);
 
                 var addToCart = await _cartService.AddToExistingCart(dish, cart);
 
@@ -74,9 +87,22 @@ namespace OnlinePizza.Controllers
 
         public async Task<ActionResult> EditCartItem(Guid id)
         {
-            CartItem cartItem = _context.CartItems.Include(x => x.CartItemIngredients).Include(z => z.Dish).SingleOrDefault(y => y.CartItemID == id);
-            var extra = _context.Ingredients.Where(x => !cartItem.CartItemIngredients.Any(s => s.IngredientName.Equals(x.IngredientName))).ToList();
-            var extraIngredients = extra.Select(x => new CartItemIngredient() { CartItemIngredientID = _cartService.GenerateCartItemIngredientID(), CartItemID = Guid.NewGuid(), IngredientName = x.IngredientName, Selected = false, CartItemIngredientPrice = x.Price }).ToList();
+            CartItem cartItem = _context.CartItems
+                .Include(x => x.CartItemIngredients)
+                .Include(z => z.Dish).SingleOrDefault(y => y.CartItemID == id);
+
+            var extra = _context.Ingredients
+                .Where(x => !cartItem.CartItemIngredients.Any(s => s.IngredientName.Equals(x.IngredientName))).ToList();
+
+            var extraIngredients = extra.Select(x => new CartItemIngredient()
+            {
+                CartItemIngredientID = _cartService.GenerateCartItemIngredientID(),
+                CartItemID = Guid.NewGuid(),
+                IngredientName = x.IngredientName,
+                Selected = false,
+                CartItemIngredientPrice = x.Price
+
+            }).ToList();
 
             cartItem.ExtraCartItemIngredients = extraIngredients;
 
@@ -89,7 +115,11 @@ namespace OnlinePizza.Controllers
         [HttpPost]
         public async Task<ActionResult> EditCartItem(CartItem model)
         {
-            CartItem cartItem = _context.CartItems.Include(x => x.CartItemIngredients).Include(i => i.ExtraCartItemIngredients).Include(z => z.Dish).SingleOrDefault(y => y.CartItemID == model.CartItemID);
+            CartItem cartItem = _context.CartItems
+                .Include(x => x.CartItemIngredients)
+                .Include(i => i.ExtraCartItemIngredients)
+                .Include(z => z.Dish).SingleOrDefault(y => y.CartItemID == model.CartItemID);
+
             List<CartItemIngredient> clearExtraIngredients = new List<CartItemIngredient>();
 
             if(model.ExtraCartItemIngredients == null)
@@ -101,9 +131,12 @@ namespace OnlinePizza.Controllers
             {
                 foreach (var ingredient in model.ExtraCartItemIngredients)
                 {
-                    if (ingredient.Selected && !cartItem.CartItemIngredients.Any(x => x.CartItemIngredientID.Equals(ingredient.CartItemIngredientID)))
+                    if (ingredient.Selected && !cartItem.CartItemIngredients
+                        .Any(x => x.CartItemIngredientID.Equals(ingredient.CartItemIngredientID)))
                     {
-                        CartItemIngredient newIngredient = _context.CartItemIngredients.SingleOrDefault(s => s.CartItemIngredientID == ingredient.CartItemIngredientID);
+                        CartItemIngredient newIngredient = _context.CartItemIngredients
+                            .SingleOrDefault(s => s.CartItemIngredientID == ingredient.CartItemIngredientID);
+
                         var newCartItemIngredient = new CartItemIngredient
                         {
                             CartItem = cartItem,
@@ -131,9 +164,11 @@ namespace OnlinePizza.Controllers
             {
                 foreach (var orginalIngredient in model.CartItemIngredients)
                 {
-                    CartItemIngredient ingredientToRemove = _context.CartItemIngredients.SingleOrDefault(s => s.CartItemIngredientID == orginalIngredient.CartItemIngredientID);
+                    CartItemIngredient ingredientToRemove = _context.CartItemIngredients
+                        .SingleOrDefault(s => s.CartItemIngredientID == orginalIngredient.CartItemIngredientID);
 
-                    if (!orginalIngredient.Selected && cartItem.CartItemIngredients.Any(x => x.CartItemIngredientID.Equals(orginalIngredient.CartItemIngredientID)))
+                    if (!orginalIngredient.Selected && cartItem.CartItemIngredients
+                        .Any(x => x.CartItemIngredientID.Equals(orginalIngredient.CartItemIngredientID)))
                     {
                         cartItem.CartItemIngredients.RemoveAll(x => x.CartItemIngredientID.Equals(orginalIngredient.CartItemIngredientID));
                         cartItem.Price = cartItem.Price - ingredientToRemove.CartItemIngredientPrice;
@@ -152,7 +187,11 @@ namespace OnlinePizza.Controllers
         public async Task<ActionResult> RemoveFromCart(Guid id)
         {
             var cartID = HttpContext.Session.GetInt32("Cart");
-            Cart cart = await _context.Carts.Include(x => x.CartItems).ThenInclude(z => z.Dish).SingleOrDefaultAsync(y => y.CartID == cartID);
+
+            Cart cart = await _context.Carts
+                .Include(x => x.CartItems).ThenInclude(z => z.Dish)
+                .SingleOrDefaultAsync(y => y.CartID == cartID);
+
             var cartItem = _context.CartItems.FirstOrDefault(ci => ci.CartItemID == id);
 
             if (cartItem != null)
@@ -169,7 +208,11 @@ namespace OnlinePizza.Controllers
         public async Task<ActionResult> ClearCart()
         {
             var cartID = HttpContext.Session.GetInt32("Cart");
-            Cart cart = await _context.Carts.Include(x => x.CartItems).ThenInclude(z => z.Dish).SingleOrDefaultAsync(y => y.CartID == cartID);
+
+            Cart cart = await _context.Carts
+                .Include(x => x.CartItems)
+                .ThenInclude(z => z.Dish)
+                .SingleOrDefaultAsync(y => y.CartID == cartID);
 
             HttpContext.Session.Clear();
             _context.Carts.Remove(cart);

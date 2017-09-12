@@ -49,3 +49,9 @@ h2, h1 {
 h4, td, th, label, h3, a, p {
     font-family: 'Alegreya Sans SC';
 }
+
+.cart {
+    float: right;
+    background-color: grey;
+    
+}

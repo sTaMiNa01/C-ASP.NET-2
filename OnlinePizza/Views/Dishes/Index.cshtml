@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Index";
+    var CartItemsList = ViewData["CartItemsList"];
 }
 
 <h2>Meny</h2>
@@ -32,20 +33,15 @@
             <td>
                 @if (User.IsInRole("Admin"))
                 {
-
                     <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> <a>|</a>
                     <a asp-action="Details" asp-route-id="@item.ID">Details</a> <a>|</a>
                     <a asp-action="Delete" asp-route-id="@item.ID">Delete</a> <a>|</a>
                     <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@item.ID"><i class="fa fa-cart-plus " aria-hidden="true" style="color:black;"></i></a>
-
-
                 }
                 else
                 {
-
                     <a asp-action="Details" asp-route-id="@item.ID"><i class="fa fa-info-circle " aria-hidden="true" style="color:black;"></i></a> <a>|</a>
                     <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@item.ID"><i class="fa fa-cart-plus " aria-hidden="true" style="color:black;"></i></a>
-
                 }
 
             </td>
@@ -54,6 +50,6 @@
 
     </tbody>
 </table>
-@*<div class="cart">
-    @{Html.RenderPartial("_CartPartial");}
-</div>*@
+<div class="cart">
+    @{Html.RenderPartial("_CartPartial", CartItemsList);}
+</div>

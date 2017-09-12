@@ -30,15 +30,19 @@ namespace OnlinePizza.ViewModels
         public int ZipCode { get; set; }
 
         [Required]
+        [RegularExpression(@"^([0-9]{12})$", ErrorMessage = "Please enter valid cardnumber")]
         public long CardNumber { get; set; }
 
         [Required]
+        [RegularExpression(@"^([0-9]{2})$", ErrorMessage = "Please enter valid month")]
         public int Month { get; set; }
 
         [Required]
+        [RegularExpression(@"^([0-9]{4})$", ErrorMessage = "Please enter valid year")]
         public int Year { get; set; }
 
         [Required]
+        [RegularExpression(@"^([0-9]{3})$", ErrorMessage = "Please enter valid cvc")]
         public int Cvc { get; set; }
     }
 }

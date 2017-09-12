@@ -1,41 +1,8 @@
 ﻿@model List<CartItem>
 
-@if (Model != null && Model.Count > 0)
+@*@if (Model != null && Model.Count > 0)
 {
-<h1>Cart</h1>
+    <h1>HEJ</h1>
+}*@
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                <h4>Dish</h4>
-            </th>
-            <th>
-                <h4>Price</h4>
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Dish.DishName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price) kr
-                </td>
-                <td>
-                    <a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-id="@item.CartItemID">Remove</a> <a>|</a>
-                    <a asp-controller="Cart" asp-action="EditCartItem" asp-route-id="@item.CartItemID">Edit</a>
-                </td>
-            </tr>
-
-        }
-    </tbody>
-</table>
-<div>
-    <a asp-controller="Payment" asp-action="Pay" class="btn btn-default">Check out</a>
-    <a asp-controller="Cart" asp-action="ClearCart" class="btn btn-default">Clear Cart</a>
-</div>
-}
+<h1>Hej</h1>
