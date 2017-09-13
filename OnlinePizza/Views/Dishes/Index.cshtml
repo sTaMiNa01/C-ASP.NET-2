@@ -7,7 +7,7 @@
 
 <h2>Meny</h2>
 
-<table class="table">
+<table class="table dishTabel">
     <thead>
         <tr>
                 <th>
@@ -50,6 +50,6 @@
 
     </tbody>
 </table>
-<div class="cart">
+<div id="cartPartial" class="cart">
     @{Html.RenderPartial("_CartPartial", CartItemsList);}
 </div>
