@@ -38,27 +38,7 @@ namespace OnlinePizza.Controllers
                 .ThenInclude(x => x.Ingredient)
                 .SingleOrDefaultAsync(m => m.ID == Id);
 
-            int cartsID;
-
-            if (HttpContext.Session.GetInt32("Cart") == null)
-            {
-                var newCart = await _cartService.AddToNewCart(dish);
-                cartsID = newCart.CartID;
-
-                HttpContext.Session.SetInt32("Cart", cartsID);
-
-
-            } else
-            {
-                var cartID = HttpContext.Session.GetInt32("Cart");
-                Cart cart = await _context.Carts
-                    .Include(x => x.CartItems)
-                    .ThenInclude(z => z.Dish)
-                    .SingleOrDefaultAsync(y => y.CartID == cartID);
-
-                var addToCart = await _cartService.AddToExistingCart(dish, cart);
-
-            }
+            var addToCart = await _cartService.AddToCart(dish);
 
             return RedirectToAction("Index", "Dishes");
         }
@@ -103,7 +83,7 @@ namespace OnlinePizza.Controllers
             if(model.ExtraCartItemIngredients == null)
             {
 
-                return RedirectToAction("Index");
+               return RedirectToAction("Index", "Dishes");
 
             } else
             {
@@ -135,7 +115,7 @@ namespace OnlinePizza.Controllers
             if (model.CartItemIngredients == null)
             {
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Dishes");
 
             }
             else
@@ -159,7 +139,7 @@ namespace OnlinePizza.Controllers
             _context.Update(cartItem);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Dishes");
         }
 
         public async Task<ActionResult> RemoveFromCart(Guid id)
@@ -180,7 +160,7 @@ namespace OnlinePizza.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Dishes");
         }
 
         public async Task<ActionResult> ClearCart()

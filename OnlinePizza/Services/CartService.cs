@@ -11,8 +11,6 @@ namespace OnlinePizza.Services
 {
     public class CartService
     {
-        List<CartItemIngredient> cartItemIngredient = new List<CartItemIngredient>();
-        CartItem cartItem = new CartItem();
         ISession _session => _httpContextAccessor.HttpContext.Session;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -25,52 +23,12 @@ namespace OnlinePizza.Services
 
         }
 
-        public async Task<Cart> AddToNewCart(Dish dish)
+        public async Task<Cart> AddToCart(Dish dish)
         {
             Cart cart = new Cart();
-            List<CartItem> cartItems = new List<CartItem>();
-            var carts = await _context.Carts.ToListAsync();
-            int newID = carts.Count + 1;
             var newCartItemID = Guid.NewGuid();
-
-            foreach (var item in dish.DishIngredients)
-            {
-
-                var newCartItemIngredient = new CartItemIngredient
-                {
-                    CartItem = cartItem,
-                    CartItemID = newCartItemID,
-                    IngredientName = item.Ingredient.IngredientName,
-                    CartItemIngredientPrice = item.Ingredient.Price,
-                    Selected = true,
-                    CartItemIngredientID = GenerateCartItemIngredientID()
-                };
-
-                cartItemIngredient.Add(newCartItemIngredient);
-            }
-
-            cartItems.Add(new CartItem
-            {
-                Dish = dish,
-                CartID = newID,
-                Cart = cart,
-                CartItemIngredients = cartItemIngredient,
-                CartItemID = newCartItemID,
-                Price = dish.Price
-            });
-
-            cart.CartID = newID;
-            cart.CartItems = cartItems;
-
-           await _context.Carts.AddAsync(cart);
-           await _context.SaveChangesAsync();
-
-            return cart;
-        }
-
-        public async Task<Cart> AddToExistingCart(Dish dish, Cart cart)
-        {
-            var newCartItemID = Guid.NewGuid();
+            List<CartItemIngredient> cartItemIngredient = new List<CartItemIngredient>();
+            CartItem cartItem = new CartItem();
 
             foreach (var item in dish.DishIngredients)
             {
@@ -91,15 +49,41 @@ namespace OnlinePizza.Services
             cartItem.CartItemID = newCartItemID;
             cartItem.Dish = dish;
             cartItem.Cart = cart;
-            cartItem.CartID = cart.CartID;
             cartItem.CartItemIngredients = cartItemIngredient;
             cartItem.Price = dish.Price;
 
-            _context.CartItems.Add(cartItem);
-            await _context.SaveChangesAsync();
+            if (_session.GetInt32("Cart") == null)
+            {
+                var carts = await _context.Carts.ToListAsync();
+                int newID = carts.Count + 1;
 
-            return (cart);
+                cartItem.CartID = newID;
+                cart.CartID = newID;
+
+                _session.SetInt32("Cart", newID);
+
+                await _context.Carts.AddAsync(cart);
+                _context.CartItems.Add(cartItem);
+                await _context.SaveChangesAsync();
+
+            }
+            else
+            {
+                var cartID = _session.GetInt32("Cart");
+                cart = await _context.Carts
+                    .Include(x => x.CartItems)
+                    .ThenInclude(z => z.Dish)
+                    .SingleOrDefaultAsync(y => y.CartID == cartID);
+
+                cartItem.CartID = cart.CartID;
+
+                _context.CartItems.Add(cartItem);
+                await _context.SaveChangesAsync();
+            }
+
+            return cart;
         }
+
 
         public async Task<List<CartItem>> GetCartItems()
         {
