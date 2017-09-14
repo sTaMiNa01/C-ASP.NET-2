@@ -63,7 +63,7 @@ a {
 }
 
 .dishTabel {
-    width:1020px;
+    width:1000px;
 }
 
 .cartButtons {
@@ -72,7 +72,7 @@ a {
 
 .divCartButtons {
    float:right;
-   padding-right: 35px;
+   padding-right: 20px;
 }
 
 .logInText {

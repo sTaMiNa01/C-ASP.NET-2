@@ -30,7 +30,7 @@ namespace OnlinePizza
             //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseInMemoryDatabase(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseInMemoryDatabase("DefaultConnection"));
 
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
