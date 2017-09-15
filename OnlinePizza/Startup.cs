@@ -42,6 +42,7 @@ namespace OnlinePizza
             services.AddTransient<UserManager<ApplicationUser>>();
             services.AddTransient<RoleManager<IdentityRole>>();
             services.AddTransient<CartService>();
+            services.AddTransient<CalculateCartTotalService>();
 
             services.AddSession(x => x.IdleTimeout = TimeSpan.FromMinutes(5));
             services.AddMvc();

@@ -65,9 +65,9 @@ namespace OnlinePizza.Data
 #endregion
 
                 #region DishIngredients props
-                var vesuvioCheese = new DishIngredient { Dish = margaritha, Ingredient = cheese };
-                var vesuvioTomato = new DishIngredient { Dish = margaritha, Ingredient = tomato };
-                var vesuvioHam = new DishIngredient { Dish = margaritha, Ingredient = ham };
+                var vesuvioCheese = new DishIngredient { Dish = vesuvio, Ingredient = cheese };
+                var vesuvioTomato = new DishIngredient { Dish = vesuvio, Ingredient = tomato };
+                var vesuvioHam = new DishIngredient { Dish = vesuvio, Ingredient = ham };
 
                 var hawaiiTomato = new DishIngredient { Dish = hawaii, Ingredient = tomato };
                 var hawaiiCheese = new DishIngredient { Dish = hawaii, Ingredient = cheese };
