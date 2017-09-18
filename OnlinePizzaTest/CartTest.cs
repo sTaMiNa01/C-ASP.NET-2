@@ -8,12 +8,12 @@ namespace OnlinePizzaTest
 {
     public class CartTest
     {
-        private readonly CalculateCartTotalService _CalculateCartTotalService;
+        private readonly UnitTestService _UnitTestService;
 
 
         public CartTest()
         {
-            _CalculateCartTotalService = new CalculateCartTotalService();
+            _UnitTestService = new UnitTestService();
         }
 
         [Fact]
@@ -75,9 +75,42 @@ namespace OnlinePizzaTest
 
             var actual = vesuvio.Price;
 
-            var result = _CalculateCartTotalService.CartTotal(cart);
+            var result = _UnitTestService.CartTotal(cart);
 
             Assert.Equal(actual,result);
+
+        }
+
+        [Fact]
+        public void AddToCartTest()
+        {
+#region MockUpData
+            var pasta = new Category() { CategoryID = 2, CategoryName = "Pasta" };
+
+            var cream = new Ingredient { IngredientID = 8, IngredientName = "Cream", Price = 5 };
+            var pastaPenne = new Ingredient { IngredientID = 9, IngredientName = "Pasta penne", Price = 10 };
+            var pepper = new Ingredient { IngredientID = 6, IngredientName = "Pepper", Price = 5 };
+
+            var veggiPasta = new Dish() { ID = 6, DishName = "Veggi Pasta", Price = 70, CategoryID = pasta.CategoryID, Category = pasta };
+
+            var veggiPastapasta = new DishIngredient { Dish = veggiPasta, Ingredient = pastaPenne };
+            var veggiPastaCream = new DishIngredient { Dish = veggiPasta, Ingredient = cream };
+            var veggiPastaPepper = new DishIngredient { Dish = veggiPasta, Ingredient = pepper };
+
+            veggiPasta.DishIngredients = new List<DishIngredient>();
+            veggiPasta.DishIngredients.Add(veggiPastapasta);
+            veggiPasta.DishIngredients.Add(veggiPastaCream);
+            veggiPasta.DishIngredients.Add(veggiPastaPepper);
+            #endregion
+
+            Cart cart = new Cart();
+            cart.CartID = 2;
+
+            var actual = 1;
+
+            var result = _UnitTestService.AddToCartTest(cart, veggiPasta);
+
+            Assert.Equal(actual, result);
 
         }
 
