@@ -25,7 +25,6 @@ namespace OnlinePizzaTest
             var cheese = new Ingredient { IngredientID = 1, IngredientName = "Cheese", Price = 5 };
             var ham = new Ingredient { IngredientID = 2, IngredientName = "Ham", Price = 10 };
             var tomato = new Ingredient { IngredientID = 3, IngredientName = "Tomato", Price = 5 };
-            var pineapple = new Ingredient { IngredientID = 4, IngredientName = "Pineapple", Price = 5 };
 
             var vesuvio = new Dish() { ID = 1, DishName = "Vesuvio", Price = 75, CategoryID = pizza.CategoryID, Category = pizza };
 

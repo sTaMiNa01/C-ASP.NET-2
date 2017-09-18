@@ -50,7 +50,8 @@ namespace OnlinePizza.Controllers
                 .Include(z => z.Dish).SingleOrDefault(y => y.CartItemID == id);
 
             var extra = _context.Ingredients
-                .Where(x => !cartItem.CartItemIngredients.Any(s => s.IngredientName.Equals(x.IngredientName))).ToList();
+                .Where(x => !cartItem.CartItemIngredients
+                .Any(s => s.IngredientName.Equals(x.IngredientName))).ToList();
 
             var extraIngredients = extra.Select(x => new CartItemIngredient()
             {
@@ -76,7 +77,8 @@ namespace OnlinePizza.Controllers
             CartItem cartItem = _context.CartItems
                 .Include(x => x.CartItemIngredients)
                 .Include(i => i.ExtraCartItemIngredients)
-                .Include(z => z.Dish).SingleOrDefault(y => y.CartItemID == model.CartItemID);
+                .Include(z => z.Dish)
+                .SingleOrDefault(y => y.CartItemID == model.CartItemID);
 
             List<CartItemIngredient> clearExtraIngredients = new List<CartItemIngredient>();
 
@@ -92,7 +94,8 @@ namespace OnlinePizza.Controllers
                     if (ingredient.Selected && !cartItem.CartItemIngredients
                         .Any(x => x.CartItemIngredientID.Equals(ingredient.CartItemIngredientID)))
                     {
-                        CartItemIngredient newIngredient = _context.CartItemIngredients
+                        CartItemIngredient newIngredient = _context
+                            .CartItemIngredients
                             .SingleOrDefault(s => s.CartItemIngredientID == ingredient.CartItemIngredientID);
 
                         var newCartItemIngredient = new CartItemIngredient
