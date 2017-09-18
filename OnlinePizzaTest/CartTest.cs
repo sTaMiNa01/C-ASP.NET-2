@@ -56,7 +56,7 @@ namespace OnlinePizzaTest
                     IngredientName = item.Ingredient.IngredientName,
                     CartItemIngredientPrice = item.Ingredient.Price,
                     Selected = true,
-                    CartItemIngredientID = GenerateCartItemIngredientID()
+                    CartItemIngredientID = _UnitTestService.GenerateCartItemIngredientID()
                 };
 
                 cartItemIngredient.Add(newCartItemIngredient);
@@ -114,12 +114,5 @@ namespace OnlinePizzaTest
 
         }
 
-        public int GenerateCartItemIngredientID()
-        {
-            int _min = 1000;
-            int _max = 9999;
-            Random _rdm = new Random();
-            return _rdm.Next(_min, _max);
-        }
     }
 }
