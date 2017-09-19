@@ -9,6 +9,7 @@ using OnlinePizza.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using OnlinePizza.ViewModels;
+using OnlinePizza.Services;
 
 namespace OnlinePizza.Controllers
 {
@@ -16,14 +17,16 @@ namespace OnlinePizza.Controllers
     {
         private readonly ApplicationDbContext _context;
         private UserManager<ApplicationUser> _userManager;
+        private readonly CartService _cartService;
 
         List<CartItem> cartItems = new List<CartItem>();
         Cart cart = new Cart();
 
-        public PaymentController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public PaymentController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, CartService cartService)
         {
             _context = context;
             _userManager = userManager;
+            _cartService = cartService;
         }
 
         [HttpGet]
@@ -35,8 +38,8 @@ namespace OnlinePizza.Controllers
                 return RedirectToAction("Index", "Dishes");
             }
 
-            var cartID = HttpContext.Session.GetInt32("Cart");
-            cart = await _context.Carts.Include(x => x.CartItems).SingleOrDefaultAsync(y => y.CartID == cartID);
+            cart = await _cartService.GetCart();
+
             cartItems = cart.CartItems;
 
             var loggedInUser = _userManager.GetUserAsync(User).Result;
@@ -57,28 +60,38 @@ namespace OnlinePizza.Controllers
                 paymentItems.ZipCode = loggedInUser.Zipcode;
             }
 
+            ViewData["OrderSum"] = OrderSum();
+
             return View(paymentItems);
         }
 
         [HttpPost]
-        public IActionResult Pay(PaymentViewModel paymentItems)
+        public async Task<IActionResult> Pay(PaymentViewModel paymentItems)
         {
+
             if (ModelState.IsValid)
             {
                 return RedirectToAction("Receipt", paymentItems);
             }
+
+            cart = await _cartService.GetCart();
+
+            cartItems = cart.CartItems;
+
+            ViewData["OrderSum"] = OrderSum();
 
             return View(paymentItems);
         }
 
         public async Task<IActionResult> Receipt()
         {
-            var cartID = HttpContext.Session.GetInt32("Cart");
-            cart = await _context.Carts.Include(x => x.CartItems).SingleOrDefaultAsync(y => y.CartID == cartID);
+            cart = await _cartService.GetCart();
+
             cartItems = cart.CartItems;
 
             ViewData["OrderSum"] = OrderSum();
 
+            HttpContext.Session.Clear();
             _context.Carts.Remove(cart);
             await _context.SaveChangesAsync();
 

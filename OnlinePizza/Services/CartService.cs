@@ -114,6 +114,16 @@ namespace OnlinePizza.Services
             return (cartItems);
         }
 
+        public async Task<Cart> GetCart()
+        {
+            Cart cart = new Cart();
+
+            var cartID = _session.GetInt32("Cart");
+            cart = await _context.Carts.Include(x => x.CartItems).SingleOrDefaultAsync(y => y.CartID == cartID);
+
+            return cart;
+        }
+
         public int GenerateCartItemIngredientID()
         {
             int _min = 1000;

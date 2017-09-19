@@ -1,9 +1,10 @@
 ﻿@model OnlinePizza.ViewModels.PaymentViewModel
 @{
     ViewData["Title"] = "Pay";
+    var total = ViewData["OrderSum"];
 }
 
-<h2>Pay - Total sum to pay: @Model.OrderSum kr</h2>
+<h2>Pay - Total sum to pay: @total kr</h2>
 
 <div class="row">
     <div class="col-md-4">
