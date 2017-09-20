@@ -22,9 +22,9 @@ namespace OnlinePizzaTest
 #region     MockUpData
             var pizza = new Category() { CategoryID = 1, CategoryName = "Pizza" };
 
-            var cheese = new Ingredient { IngredientID = 1, IngredientName = "Cheese", Price = 5 };
-            var ham = new Ingredient { IngredientID = 2, IngredientName = "Ham", Price = 10 };
-            var tomato = new Ingredient { IngredientID = 3, IngredientName = "Tomato", Price = 5 };
+            var cheese = new Ingredient { IngredientID = Guid.NewGuid(), IngredientName = "Cheese", Price = 5 };
+            var ham = new Ingredient { IngredientID = Guid.NewGuid(), IngredientName = "Ham", Price = 10 };
+            var tomato = new Ingredient { IngredientID = Guid.NewGuid(), IngredientName = "Tomato", Price = 5 };
 
             var vesuvio = new Dish() { ID = 1, DishName = "Vesuvio", Price = 75, CategoryID = pizza.CategoryID, Category = pizza };
 
@@ -56,7 +56,7 @@ namespace OnlinePizzaTest
                     IngredientName = item.Ingredient.IngredientName,
                     CartItemIngredientPrice = item.Ingredient.Price,
                     Selected = true,
-                    CartItemIngredientID = _UnitTestService.GenerateCartItemIngredientID()
+                    CartItemIngredientID = Guid.NewGuid()
                 };
 
                 cartItemIngredient.Add(newCartItemIngredient);
@@ -87,9 +87,9 @@ namespace OnlinePizzaTest
 #region MockUpData
             var pasta = new Category() { CategoryID = 2, CategoryName = "Pasta" };
 
-            var cream = new Ingredient { IngredientID = 8, IngredientName = "Cream", Price = 5 };
-            var pastaPenne = new Ingredient { IngredientID = 9, IngredientName = "Pasta penne", Price = 10 };
-            var pepper = new Ingredient { IngredientID = 6, IngredientName = "Pepper", Price = 5 };
+            var cream = new Ingredient { IngredientID = Guid.NewGuid(), IngredientName = "Cream", Price = 5 };
+            var pastaPenne = new Ingredient { IngredientID = Guid.NewGuid(), IngredientName = "Pasta penne", Price = 10 };
+            var pepper = new Ingredient { IngredientID = Guid.NewGuid(), IngredientName = "Pepper", Price = 5 };
 
             var veggiPasta = new Dish() { ID = 6, DishName = "Veggi Pasta", Price = 70, CategoryID = pasta.CategoryID, Category = pasta };
 

@@ -7,7 +7,7 @@ namespace OnlinePizza.ViewModels
 {
     public class IngredientViewModel
     {
-        public int ID { get; set; }
+        public Guid ID { get; set; }
         public string Name { get; set; }
         public int Price { get; set; }
         public bool Selected { get; set; }

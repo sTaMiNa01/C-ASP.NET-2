@@ -30,7 +30,7 @@ namespace OnlinePizza.Controllers
         }
 
         // GET: Ingredients/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {
@@ -64,11 +64,11 @@ namespace OnlinePizza.Controllers
 
             if (ModelState.IsValid)
             {
-                var ingredients = await _context.Ingredients.ToListAsync();
-                int newID = ingredients.Count + 1;
+                //var ingredients = await _context.Ingredients.ToListAsync();
+                //int newID = ingredients.Count + 1;
 
                 newIngredient.IngredientName = model.IngredientName;
-                newIngredient.IngredientID = newID;
+                newIngredient.IngredientID = Guid.NewGuid();
                 newIngredient.Price = model.Price;
 
                 _context.Add(newIngredient);
@@ -79,7 +79,7 @@ namespace OnlinePizza.Controllers
         }
 
         // GET: Ingredients/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
@@ -99,7 +99,7 @@ namespace OnlinePizza.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IngredientID,IngredientName,Price")] Ingredient ingredient)
+        public async Task<IActionResult> Edit(Guid id, [Bind("IngredientID,IngredientName,Price")] Ingredient ingredient)
         {
             if (id != ingredient.IngredientID)
             {
@@ -130,7 +130,7 @@ namespace OnlinePizza.Controllers
         }
 
         // GET: Ingredients/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
@@ -150,7 +150,7 @@ namespace OnlinePizza.Controllers
         // POST: Ingredients/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var ingredient = await _context.Ingredients.SingleOrDefaultAsync(m => m.IngredientID == id);
             _context.Ingredients.Remove(ingredient);
@@ -158,7 +158,7 @@ namespace OnlinePizza.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool IngredientExists(int id)
+        private bool IngredientExists(Guid id)
         {
             return _context.Ingredients.Any(e => e.IngredientID == id);
         }

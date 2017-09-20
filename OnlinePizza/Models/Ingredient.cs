@@ -7,7 +7,7 @@ namespace OnlinePizza.Models
 {
     public class Ingredient
     {
-        public int IngredientID { get; set; }
+        public Guid IngredientID { get; set; }
         public string IngredientName { get; set; }
         public int Price { get; set; }
         public List<DishIngredient> DishIngredients { get; set; }

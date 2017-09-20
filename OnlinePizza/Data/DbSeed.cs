@@ -40,16 +40,16 @@ namespace OnlinePizza.Data
                 var salad = new Category() { CategoryID = 3, CategoryName = "Salad" };
 
 #region         Ingredients
-                var cheese = new Ingredient { IngredientID = 1, IngredientName = "Cheese", Price = 5 };
-                var ham = new Ingredient { IngredientID = 2, IngredientName = "Ham", Price = 10 };
-                var tomato = new Ingredient { IngredientID = 3, IngredientName = "Tomato", Price = 5 };
-                var pineapple = new Ingredient { IngredientID = 4, IngredientName = "Pineapple", Price = 5 };
-                var greenSalad = new Ingredient { IngredientID = 5, IngredientName = "Green Salad", Price = 5 };
-                var pepper = new Ingredient { IngredientID = 6, IngredientName = "Pepper", Price = 5 };
-                var olive = new Ingredient { IngredientID = 7, IngredientName = "Olive", Price = 5 };
-                var cream = new Ingredient { IngredientID = 8, IngredientName = "Cream", Price = 5 };
-                var pastaPenne = new Ingredient { IngredientID = 9, IngredientName = "Pasta penne", Price = 10 };
-                var bolognese = new Ingredient { IngredientID = 10, IngredientName = "Bolognese", Price = 20 };
+                var cheese = new Ingredient { IngredientID = Guid.NewGuid(), IngredientName = "Cheese", Price = 5 };
+                var ham = new Ingredient { IngredientID = Guid.NewGuid(), IngredientName = "Ham", Price = 10 };
+                var tomato = new Ingredient { IngredientID = Guid.NewGuid(), IngredientName = "Tomato", Price = 5 };
+                var pineapple = new Ingredient { IngredientID = Guid.NewGuid(), IngredientName = "Pineapple", Price = 5 };
+                var greenSalad = new Ingredient { IngredientID = Guid.NewGuid(), IngredientName = "Green Salad", Price = 5 };
+                var pepper = new Ingredient { IngredientID = Guid.NewGuid(), IngredientName = "Pepper", Price = 5 };
+                var olive = new Ingredient { IngredientID = Guid.NewGuid(), IngredientName = "Olive", Price = 5 };
+                var cream = new Ingredient { IngredientID = Guid.NewGuid(), IngredientName = "Cream", Price = 5 };
+                var pastaPenne = new Ingredient { IngredientID = Guid.NewGuid(), IngredientName = "Pasta penne", Price = 10 };
+                var bolognese = new Ingredient { IngredientID = Guid.NewGuid(), IngredientName = "Bolognese", Price = 20 };
 #endregion
 
                 #region Dishes

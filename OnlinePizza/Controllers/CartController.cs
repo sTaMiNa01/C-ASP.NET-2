@@ -55,11 +55,11 @@ namespace OnlinePizza.Controllers
 
             var extraIngredients = extra.Select(x => new CartItemIngredient()
             {
-                CartItemIngredientID = _cartService.GenerateCartItemIngredientID(),
+                CartItemIngredientID = Guid.NewGuid(),
                 CartItemID = Guid.NewGuid(),
                 IngredientName = x.IngredientName,
                 Selected = false,
-                CartItemIngredientPrice = x.Price
+                CartItemIngredientPrice = x.Price,
 
             }).ToList();
 
@@ -105,7 +105,7 @@ namespace OnlinePizza.Controllers
                             IngredientName = newIngredient.IngredientName,
                             CartItemIngredientPrice = newIngredient.CartItemIngredientPrice,
                             Selected = true,
-                            CartItemIngredientID = _cartService.GenerateCartItemIngredientID()
+                            CartItemIngredientID = Guid.NewGuid()
                         };
 
                         cartItem.CartItemIngredients.Add(newCartItemIngredient);

@@ -42,7 +42,7 @@ namespace OnlinePizza.Services
                     IngredientName = item.Ingredient.IngredientName,
                     CartItemIngredientPrice = item.Ingredient.Price,
                     Selected = true,
-                    CartItemIngredientID = GenerateCartItemIngredientID()
+                    CartItemIngredientID = Guid.NewGuid()
                 };
 
                 cartItemIngredient.Add(newCartItemIngredient);
@@ -62,14 +62,6 @@ namespace OnlinePizza.Services
             cartItemsSum = cart.CartItems.Count();
 
             return cartItemsSum;
-        }
-
-        public int GenerateCartItemIngredientID()
-        {
-            int _min = 1000;
-            int _max = 9999;
-            Random _rdm = new Random();
-            return _rdm.Next(_min, _max);
         }
     }
 }
